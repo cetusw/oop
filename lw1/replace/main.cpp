@@ -48,7 +48,6 @@ std::string ReplaceString(const std::string& inputString, const std::string& sea
 		}
 		result += inputString[j];
 	}
-
 	return result;
 }
 
@@ -98,12 +97,6 @@ int processStdinMode()
 	while (std::getline(std::cin, line))
 	{
 		input.emplace_back(line);
-	}
-
-	if (input.empty())
-	{
-		std::cout << "ERROR" << std::endl;
-		return 1;
 	}
 
 	for (const auto& inputLine : input)

@@ -7,42 +7,42 @@ assert_equal() {
     fi
 }
 
-# Замена, содержащая искомую строку
+#1 Замена, содержащая искомую строку
 i=1
 echo "mama delala pelmeni" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "ma" "mama"
 echo "mamamama delala pelmeni" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Одно вхождение в середине строки
+#2 Одно вхождение в середине строки
 ((i++))
 echo "12312312345" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "1231234" "XYZ"
 echo "123XYZ5" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Пустая искомая строка
+#3 Пустая искомая строка
 ((i++))
 echo "tut text" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "" "tam"
 echo "tut text" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Пустая строка-заменитель
+#4 Пустая строка-заменитель
 ((i++))
 echo "" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "hello" ""
 echo "" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Три вхождения в середине строки
+#5 Три вхождения в середине строки
 ((i++))
 echo "asdmamamaasd" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "ma" "mama"
 echo "asdmamamamamamaasd" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Ошибка открытия входного файла
+#6 Ошибка открытия входного файла
 ((i++))
 if [ -r ./test/input123.txt ]; then
     cout=$(./cmake-build-debug/replace ./test/input123.txt ./test/output.txt "1231234" "rep" 2>&1)
@@ -53,7 +53,7 @@ echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Ошибка открытия выходного файла
+#7 Ошибка открытия выходного файла
 ((i++))
 if [ -w ./test/output123.txt ]; then
     cout=$(./cmake-build-debug/replace ./test/input.txt ./test/output123.txt "1231234" "rep" 2>&1)
@@ -64,7 +64,7 @@ echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Ошибка открытия входного и выходного файла
+#8 Ошибка открытия входного и выходного файла
 ((i++))
 if [ -r ./test/input123.txt ] || [ -w ./test/output123.txt ]; then
     cout=$(./cmake-build-debug/replace ./test/input123.txt ./test/output123.txt "1231234" "rep" 2>&1)
@@ -75,56 +75,56 @@ echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Пустая входная строка
+#9 Пустая входная строка
 ((i++))
 echo "" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "replace" "random string"
 echo "" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Одно вхождение в конце строки
+#10 Одно вхождение в конце строки
 ((i++))
 echo "delala pelmeni ma" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "ma" "mama"
 echo "delala pelmeni mama" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Два вхождение в конце строки
+#11 Два вхождение в конце строки
 ((i++))
 echo "delala pelmeni mama" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "ma" "mama"
 echo "delala pelmeni mamamama" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Завершение программы при вводе строки-заменителя
+#12 Завершение программы при вводе строки-заменителя
 ((i++))
-cout=$(echo -e "searchLine\n\cD" | ./cmake-build-debug/replace 2>&1)
+cout=$(./cmake-build-debug/replace "searchLine\n\cD" 2>&1)
 echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Завершение программы при вводе искомой строки
+#13 Завершение программы при вводе искомой строки
 ((i++))
-cout=$(echo -e "\cD\n" | ./cmake-build-debug/replace 2>&1)
+cout=$(./cmake-build-debug/replace "\cD\n" 2>&1)
 echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Несколько строк во входном файле
+#14 Несколько строк во входном файле
 ((i++))
 echo "mama delala pelmeni\nya pokushal plotno" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "ma" "mama"
 echo "mamamama delala pelmeni\nya pokushal plotno" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Замена всей строки
+#15 Замена всей строки
 ((i++))
 echo "hello" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "hello" "world"
 echo "world" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-# Искомая строка длиннее входной строки
+#16 Искомая строка длиннее входной строки
 ((i++))
 echo "short" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "longsearch" "replace"
