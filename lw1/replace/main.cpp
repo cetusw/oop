@@ -13,6 +13,16 @@ void PrintHelp()
 	}
 }
 
+void printFile(std::ifstream& file)
+{
+	std::string line;
+	while (std::getline(file, line))
+	{
+		std::cout << line << std::endl;
+	}
+	file.close();
+}
+
 void ResetOccurrence(std::string& occurrence, int& index)
 {
 	occurrence.clear();
@@ -20,34 +30,31 @@ void ResetOccurrence(std::string& occurrence, int& index)
 }
 
 std::string ReplaceString(const std::string& inputString, const std::string& searchString,
-	const std::string& replaceString)
+	const std::string& replacementString)
 {
-	std::string result; // find
-	std::string stringOccurrence;
-
-	int i = 0;
-	for (int j = 0; j < inputString.length(); j++)
+	if (searchString.empty())
 	{
-		if (inputString[j] == searchString[i])
-		{
-			stringOccurrence += inputString[j];
-			i++;
-			if (i == searchString.length())
-			{
-				result += replaceString;
-				ResetOccurrence(stringOccurrence, i);
-			}
-			continue;
-		}
-		if (!stringOccurrence.empty())
-		{
-			j -= static_cast<int>(stringOccurrence.length());
-			result += inputString[j];
-			ResetOccurrence(stringOccurrence, i);
-			continue;
-		}
-		result += inputString[j];
+		return inputString;
 	}
+
+	size_t position = 0;
+	std::string result;
+
+	while (position < inputString.length())
+	{
+		const size_t foundPosition = inputString.find(searchString, position);
+
+		if (foundPosition == std::string::npos)
+		{
+			result.append(inputString, position, inputString.length() - position);
+			break;
+		}
+
+		result.append(inputString, position, foundPosition - position);
+		result.append(replacementString);
+		position = foundPosition + searchString.length();
+	}
+
 	return result;
 }
 
@@ -63,8 +70,7 @@ void CopyFileWithReplacement(std::ifstream& inputFile, std::ofstream& outputFile
 }
 
 int processFileMode(const std::string& inputPath, const std::string& outputPath,
-	const std::string& search,
-	const std::string& replace)
+	const std::string& search, const std::string& replace)
 {
 	auto inputFile = std::ifstream(inputPath);
 	auto outputFile = std::ofstream(outputPath);
@@ -86,6 +92,7 @@ int processStdinMode()
 {
 	std::string searchString;
 	std::string replaceString;
+	std::string line;
 
 	if (!std::getline(std::cin, searchString) || !std::getline(std::cin, replaceString))
 	{
@@ -93,7 +100,15 @@ int processStdinMode()
 		return 1;
 	}
 
-	CopyFileWithReplacement(std::cin, std::cout, searchString, replaceString);  // понять, как мне считывать данные из потока ввода
+	std::ofstream outReplacedFile("../buf.txt");
+	while (std::getline(std::cin, line))
+	{
+		outReplacedFile << ReplaceString(line, searchString, replaceString) << std::endl;
+	}
+	outReplacedFile.close();
+
+	std::ifstream inReplacedFile("../buf.txt");
+	printFile(inReplacedFile);
 
 	return 0;
 }

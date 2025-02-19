@@ -20,10 +20,7 @@ void PrintHelp()
 	}
 }
 
-bool isStringNumber(const std::string& str)
-{
-	return std::ranges::all_of(str, ::isdigit);
-}
+bool isStringNumber(const std::string& str) { return std::ranges::all_of(str, ::isdigit); }
 
 int CharToInt(const char ch)
 {

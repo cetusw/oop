@@ -117,14 +117,20 @@ echo "mama delala pelmeni\nya pokushal plotno" > ./test/input.txt
 echo "mamamama delala pelmeni\nya pokushal plotno" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-#15 Замена всей строки
+#15 Несколько строк во потоке ввода
+((i++))
+printf "ma\nmama\nmama delala pelmeni\nya pokushal plotno\n" | ./cmake-build-debug/replace > ./test/output.txt
+echo -e "mamamama delala pelmeni\nya pokushal plotno" > ./test/expected.txt
+assert_equal ./test/output.txt ./test/expected.txt
+
+#16 Замена всей строки
 ((i++))
 echo "hello" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "hello" "world"
 echo "world" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-#16 Искомая строка длиннее входной строки
+#17 Искомая строка длиннее входной строки
 ((i++))
 echo "short" > ./test/input.txt
 ./cmake-build-debug/replace ./test/input.txt ./test/output.txt "longsearch" "replace"
