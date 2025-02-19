@@ -5,39 +5,70 @@
 #include <iostream>
 #include <ranges>
 
-void printHelp()
+void PrintHelp()
 {
 	auto helpFile = std::ifstream("../utils/help.txt");
 	std::string line;
+	if (!helpFile.is_open())
+	{
+		std::cerr << "ERROR" << std::endl;
+		return;
+	}
 	while (std::getline(helpFile, line))
 	{
 		std::cout << line << std::endl;
 	}
 }
 
-bool isNegativeString(const std::string& number) { return number[0] == '-'; }
+bool isStringNumber(const std::string& str)
+{
+	return std::ranges::all_of(str, ::isdigit);
+}
+
+int CharToInt(const char ch)
+{
+	int digit = 0;
+	if (isdigit(ch))
+	{
+		digit = ch - '0';
+	}
+	else if (isalpha(ch))
+	{
+		digit = toupper(ch) - 'A' + 10;
+	}
+
+	return digit;
+}
+
+bool isRadixValid(const int radix)
+{
+	if (radix < 2 || radix > 36)
+	{
+		return false;
+	}
+	return true;
+}
 
 int StringToInt(const std::string& value, const int radix, bool& wasError)
 {
-	if (radix < 2 || radix > 36)
+	if (!isRadixValid(radix))
 	{
 		wasError = true;
 		return 1;
 	}
 
-	int result = 0;
-	int degree = 0;
-	for (int i = static_cast<int>(value.length()) - 1; i >= 0; i--)
+	bool isNegative = false;
+	int startIndex = 0;
+	if (value[0] == '-')
 	{
-		int digit = 0;
-		if (isdigit(value[i]))
-		{
-			digit = value[i] - '0';
-		}
-		else if (isalpha(value[i]))
-		{
-			digit = toupper(value[i]) - 'A' + 10;
-		}
+		isNegative = true;
+		startIndex = 1;
+	}
+
+	int result = 0;
+	for (; startIndex < value.size(); startIndex++)
+	{
+		const int digit = CharToInt(value[startIndex]);
 
 		if (digit < 0 || digit >= radix)
 		{
@@ -45,19 +76,43 @@ int StringToInt(const std::string& value, const int radix, bool& wasError)
 			return 1;
 		}
 
-		result += digit * static_cast<int>(pow(radix, degree));
-		degree++;
+		if (result > (std::numeric_limits<int>::max() - digit) / radix)
+		{
+			wasError = true;
+			return 1;
+		}
+
+		result = result * radix + digit;
 	}
 
-	return isNegativeString(value) ? -result : result;
+	return isNegative ? -result : result;
+}
+
+std::string IntToNewNotation(int decimal, const int radix)
+{
+	std::string number;
+	while (decimal > 0)
+	{
+		if (const int digit = decimal % radix; digit < 10)
+		{
+			number += static_cast<char>(digit + '0');
+		}
+		else
+		{
+			number += static_cast<char>(digit - 10 + 'A');
+		}
+
+		decimal /= radix;
+	}
+
+	return number;
 }
 
 std::string IntToString(int decimal, const int radix, bool& wasError)
 {
-	std::string result;
 	bool isNegative = false;
 
-	if (radix < 2 || radix > 36)
+	if (!isRadixValid(radix))
 	{
 		wasError = true;
 		return "";
@@ -74,20 +129,7 @@ std::string IntToString(int decimal, const int radix, bool& wasError)
 		decimal = -decimal;
 	}
 
-	while (decimal > 0)
-	{
-		const int digit = decimal % radix;
-		if (digit < 10)
-		{
-			result += static_cast<char>(digit + '0');
-		}
-		else
-		{
-			result += static_cast<char>(digit - 10 + 'A');
-		}
-
-		decimal /= radix;
-	}
+	std::string result = IntToNewNotation(decimal, radix);
 
 	if (isNegative)
 	{
@@ -102,10 +144,16 @@ int main(const int argc, char* argv[])
 {
 	if (argc == 2 && std::strcmp(argv[1], "-h") == 0)
 	{
-		printHelp();
+		PrintHelp();
 		return 0;
 	}
 	if (argc != 4)
+	{
+		std::cerr << "ERROR" << std::endl;
+		return 0;
+	}
+
+	if (!isStringNumber(argv[1]) || !isStringNumber(argv[2]))
 	{
 		std::cerr << "ERROR" << std::endl;
 		return 0;

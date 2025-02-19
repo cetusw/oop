@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-void printHelp()
+void PrintHelp()
 {
 	auto helpFile = std::ifstream("../utils/help.txt");
 	std::string line;
@@ -13,7 +13,7 @@ void printHelp()
 	}
 }
 
-void resetOccurrence(std::string& occurrence, int& index)
+void ResetOccurrence(std::string& occurrence, int& index)
 {
 	occurrence.clear();
 	index = 0;
@@ -22,7 +22,7 @@ void resetOccurrence(std::string& occurrence, int& index)
 std::string ReplaceString(const std::string& inputString, const std::string& searchString,
 	const std::string& replaceString)
 {
-	std::string result;
+	std::string result; // find
 	std::string stringOccurrence;
 
 	int i = 0;
@@ -35,7 +35,7 @@ std::string ReplaceString(const std::string& inputString, const std::string& sea
 			if (i == searchString.length())
 			{
 				result += replaceString;
-				resetOccurrence(stringOccurrence, i);
+				ResetOccurrence(stringOccurrence, i);
 			}
 			continue;
 		}
@@ -43,7 +43,7 @@ std::string ReplaceString(const std::string& inputString, const std::string& sea
 		{
 			j -= static_cast<int>(stringOccurrence.length());
 			result += inputString[j];
-			resetOccurrence(stringOccurrence, i);
+			ResetOccurrence(stringOccurrence, i);
 			continue;
 		}
 		result += inputString[j];
@@ -62,7 +62,8 @@ void CopyFileWithReplacement(std::ifstream& inputFile, std::ofstream& outputFile
 	}
 }
 
-int processFileMode(const char* inputPath, const char* outputPath, const std::string& search,
+int processFileMode(const std::string& inputPath, const std::string& outputPath,
+	const std::string& search,
 	const std::string& replace)
 {
 	auto inputFile = std::ifstream(inputPath);
@@ -85,8 +86,6 @@ int processStdinMode()
 {
 	std::string searchString;
 	std::string replaceString;
-	std::string line;
-	std::vector<std::string> input;
 
 	if (!std::getline(std::cin, searchString) || !std::getline(std::cin, replaceString))
 	{
@@ -94,15 +93,7 @@ int processStdinMode()
 		return 1;
 	}
 
-	while (std::getline(std::cin, line))
-	{
-		input.emplace_back(line);
-	}
-
-	for (const auto& inputLine : input)
-	{
-		std::cout << ReplaceString(inputLine, searchString, replaceString) << "\n";
-	}
+	CopyFileWithReplacement(std::cin, std::cout, searchString, replaceString);  // понять, как мне считывать данные из потока ввода
 
 	return 0;
 }
@@ -111,7 +102,7 @@ int main(const int argc, char* argv[])
 {
 	if (argc == 2 && std::strcmp(argv[1], "-h") == 0)
 	{
-		printHelp();
+		PrintHelp();
 		return 0;
 	}
 	if (argc == 5)
