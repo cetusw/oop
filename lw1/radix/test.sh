@@ -127,21 +127,42 @@ echo "7FFFFFFE" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-#19 Буквы в качестве системы счисления
+#19 Минимальное значение
+((i++))
+cout=$(./cmake-build-debug/radix 10 16 -2147483647 2>&1)
+echo "-7FFFFFFF" > ./test/expected.txt
+echo "$cout" > ./test/output.txt
+assert_equal ./test/output.txt ./test/expected.txt
+
+#20 Минимальное значение - 1
+((i++))
+cout=$(./cmake-build-debug/radix 10 16 -2147483648 2>&1)
+echo "ERROR" > ./test/expected.txt
+echo "$cout" > ./test/output.txt
+assert_equal ./test/output.txt ./test/expected.txt
+
+#21 Минимальное значение + 1
+((i++))
+cout=$(./cmake-build-debug/radix 10 16 -2147483646 2>&1)
+echo "-7FFFFFFE" > ./test/expected.txt
+echo "$cout" > ./test/output.txt
+assert_equal ./test/output.txt ./test/expected.txt
+
+#22 Буквы в качестве системы счисления
 ((i++))
 cout=$(./cmake-build-debug/radix A B 123 2>&1)
 echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-#20 Буква в качестве системы счисления текущего числа
+#23 Буква в качестве системы счисления текущего числа
 ((i++))
 cout=$(./cmake-build-debug/radix A 16 123 2>&1)
 echo "ERROR" > ./test/expected.txt
 echo "$cout" > ./test/output.txt
 assert_equal ./test/output.txt ./test/expected.txt
 
-#21 Буква в качестве системы счисления, в которую нужно перевести число
+#24 Буква в качестве системы счисления, в которую нужно перевести число
 ((i++))
 cout=$(./cmake-build-debug/radix 10 A 123 2>&1)
 echo "ERROR" > ./test/expected.txt

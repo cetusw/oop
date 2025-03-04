@@ -119,7 +119,8 @@ assert_equal ./test/output.txt ./test/expected.txt
 
 #15 Несколько строк во потоке ввода
 ((i++))
-printf "ma\nmama\nmama delala pelmeni\nya pokushal plotno\n" | ./cmake-build-debug/replace > ./test/output.txt
+printf "ma\nmama\nmama delala pelmeni
+ya pokushal plotno\n" | ./cmake-build-debug/replace > ./test/output.txt
 echo -e "mamamama delala pelmeni\nya pokushal plotno" > ./test/expected.txt
 assert_equal ./test/output.txt ./test/expected.txt
 

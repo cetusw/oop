@@ -1,7 +1,6 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <vector>
 
 void PrintHelp()
 {
@@ -13,7 +12,7 @@ void PrintHelp()
 	}
 }
 
-void printFile(std::ifstream& file)
+void PrintFile(std::ifstream& file)
 {
 	std::string line;
 	while (std::getline(file, line))
@@ -58,7 +57,7 @@ std::string ReplaceString(const std::string& inputString, const std::string& sea
 	return result;
 }
 
-void CopyFileWithReplacement(std::ifstream& inputFile, std::ofstream& outputFile,
+void CopyWithReplacement(std::istream& inputFile, std::ostream& outputFile,
 	const std::string& searchString, const std::string& replaceString)
 {
 	std::string line;
@@ -69,7 +68,7 @@ void CopyFileWithReplacement(std::ifstream& inputFile, std::ofstream& outputFile
 	}
 }
 
-int processFileMode(const std::string& inputPath, const std::string& outputPath,
+int ProcessFileMode(const std::string& inputPath, const std::string& outputPath,
 	const std::string& search, const std::string& replace)
 {
 	auto inputFile = std::ifstream(inputPath);
@@ -83,16 +82,15 @@ int processFileMode(const std::string& inputPath, const std::string& outputPath,
 		return 1;
 	}
 
-	CopyFileWithReplacement(inputFile, outputFile, searchString, replaceString);
+	CopyWithReplacement(inputFile, outputFile, searchString, replaceString);
 
 	return 0;
 }
 
-int processStdinMode()
+int ProcessStdinMode()
 {
 	std::string searchString;
 	std::string replaceString;
-	std::string line;
 
 	if (!std::getline(std::cin, searchString) || !std::getline(std::cin, replaceString))
 	{
@@ -100,15 +98,11 @@ int processStdinMode()
 		return 1;
 	}
 
-	std::ofstream outReplacedFile("../buf.txt");
-	while (std::getline(std::cin, line))
-	{
-		outReplacedFile << ReplaceString(line, searchString, replaceString) << std::endl;
-	}
-	outReplacedFile.close();
-
-	std::ifstream inReplacedFile("../buf.txt");
-	printFile(inReplacedFile);
+	std::ofstream outputBuffer("../output.txt");
+	CopyWithReplacement(std::cin, outputBuffer, searchString, replaceString);
+	outputBuffer.close();
+	std::ifstream buffer("../output.txt");
+	PrintFile(buffer);
 
 	return 0;
 }
@@ -122,11 +116,11 @@ int main(const int argc, char* argv[])
 	}
 	if (argc == 5)
 	{
-		processFileMode(argv[1], argv[2], argv[3], argv[4]);
+		ProcessFileMode(argv[1], argv[2], argv[3], argv[4]);
 	}
 	else if (argc == 1)
 	{
-		processStdinMode();
+		ProcessStdinMode();
 	}
 	else
 	{

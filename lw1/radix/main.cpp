@@ -20,9 +20,9 @@ void PrintHelp()
 	}
 }
 
-bool isStringNumber(const std::string& str) { return std::ranges::all_of(str, ::isdigit); }
+bool IsStringNumber(const std::string& str) { return std::ranges::all_of(str, ::isdigit); }
 
-int CharToInt(const char ch)
+int CharToInt(char ch)
 {
 	int digit = 0;
 	if (isdigit(ch))
@@ -37,18 +37,14 @@ int CharToInt(const char ch)
 	return digit;
 }
 
-bool isRadixValid(const int radix)
+bool IsRadixValid(const int radix) // вернуть выражение
 {
-	if (radix < 2 || radix > 36)
-	{
-		return false;
-	}
-	return true;
+	return !(radix < 2 || radix > 36);
 }
 
 int StringToInt(const std::string& value, const int radix, bool& wasError)
 {
-	if (!isRadixValid(radix))
+	if (!IsRadixValid(radix))
 	{
 		wasError = true;
 		return 1;
@@ -85,31 +81,20 @@ int StringToInt(const std::string& value, const int radix, bool& wasError)
 	return isNegative ? -result : result;
 }
 
-std::string IntToNewNotation(int decimal, const int radix)
+char IntToChar(int decimal, const int radix) // вынес функцию
 {
-	std::string number;
-	while (decimal > 0)
+	if (const int digit = decimal % radix; digit < 10)
 	{
-		if (const int digit = decimal % radix; digit < 10)
-		{
-			number += static_cast<char>(digit + '0');
-		}
-		else
-		{
-			number += static_cast<char>(digit - 10 + 'A');
-		}
-
-		decimal /= radix;
+		return static_cast<char>(digit + '0');
 	}
 
-	return number;
+	return static_cast<char>(digit - 10 + 'A');
+
 }
 
 std::string IntToString(int decimal, const int radix, bool& wasError)
 {
-	bool isNegative = false;
-
-	if (!isRadixValid(radix))
+	if (!IsRadixValid(radix))
 	{
 		wasError = true;
 		return "";
@@ -120,13 +105,20 @@ std::string IntToString(int decimal, const int radix, bool& wasError)
 		return "0";
 	}
 
+	bool isNegative = false;
+	std::string result;
+
 	if (decimal < 0)
 	{
 		isNegative = true;
 		decimal = -decimal;
 	}
 
-	std::string result = IntToNewNotation(decimal, radix);
+	while (decimal > 0)
+	{
+		result += IntToChar(decimal, radix);
+		decimal /= radix;
+	}
 
 	if (isNegative)
 	{
@@ -144,13 +136,14 @@ int main(const int argc, char* argv[])
 		PrintHelp();
 		return 0;
 	}
+
 	if (argc != 4)
 	{
 		std::cerr << "ERROR" << std::endl;
 		return 0;
 	}
 
-	if (!isStringNumber(argv[1]) || !isStringNumber(argv[2]))
+	if (!IsStringNumber(argv[1]) || !IsStringNumber(argv[2]))
 	{
 		std::cerr << "ERROR" << std::endl;
 		return 0;
