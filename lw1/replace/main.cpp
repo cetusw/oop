@@ -22,12 +22,6 @@ void PrintFile(std::ifstream& file)
 	file.close();
 }
 
-void ResetOccurrence(std::string& occurrence, int& index)
-{
-	occurrence.clear();
-	index = 0;
-}
-
 std::string ReplaceString(const std::string& inputString, const std::string& searchString,
 	const std::string& replacementString)
 {

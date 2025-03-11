@@ -97,7 +97,7 @@ void Crypt(CryptMode mode, const std::string &inputFilePath, const std::string &
     }
 }
 
-CryptMode getCryptMode(const char *value)
+CryptMode GetCryptMode(const char *value)
 {
     if (std::strcmp(value, "encrypt") == 0)
     {
@@ -115,7 +115,7 @@ int main(const int argc, char *argv[])
     try
     {
         CheckNumberOfArguments(argc);
-        const CryptMode cryptMode = getCryptMode(argv[1]);
+        const CryptMode cryptMode = GetCryptMode(argv[1]);
         int key;
         try
         {
@@ -138,7 +138,6 @@ int main(const int argc, char *argv[])
 
     return 0;
 }
-
 
 // вынести в константу crypt mode
 // вынести константы макс и мин значений, написать тесты
