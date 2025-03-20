@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.30)
-project(vector_1)
+project(oop LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -11,7 +12,5 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(vector Vector.cpp main.cpp)
-add_executable(vector-tests Vector.cpp tests/VectorTests.cpp)
-
-target_link_libraries(vector-tests PRIVATE Catch2::Catch2WithMain)
+add_subdirectory(lw2/vector_1)
+# add_subdirectory(other_project)

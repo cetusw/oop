@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Vector.h"
 
 int main()
@@ -5,9 +6,9 @@ int main()
 	try
 	{
 		std::vector<float> numbers;
-		Vector::ReadNumbers(numbers);
-		Vector::ProcessNumbers(numbers);
-		Vector::PrintSortedNumbers(numbers);
+		ReadNumbers(numbers);
+		ProcessNumbers(numbers);
+		PrintSortedNumbers(numbers);
 	}
 	catch (const std::exception& e)
 	{
@@ -15,7 +16,7 @@ int main()
 	}
 }
 
-// написать тесты
-// переименовать на GetPositivesNumbersCount + константная ссылка
-// возвращать сразу GetSumOfPositives
-// возвращать сразу GetPositivesNumbersCount
+// написать тесты +
+
+// убрать инклуды из хедеров +
+// убрать классы +
