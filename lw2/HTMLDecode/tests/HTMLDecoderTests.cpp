@@ -26,6 +26,8 @@ struct TestData
         {"", ""},
         {"&", "&"}
     };
+
+	// структура, которая принимает тестовую строку, ожидаемое значение, описание
 };
 
 void RunDecodeStringTests(const std::map<std::string, std::string> &testCases)

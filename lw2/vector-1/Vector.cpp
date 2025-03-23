@@ -45,6 +45,7 @@ void PrintSortedNumbers(std::vector<float> &numbers)
         std::cout << std::fixed << std::setprecision(3) << number << " ";
     }
     std::cout << std::endl;
+    // не изменять
 }
 
 float GetSumOfPositives(std::vector<float> &numbers)

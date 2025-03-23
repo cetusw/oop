@@ -1,0 +1,188 @@
+#include "Dictionary.h"
+
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+
+bool IsEnglish(const std::string& word)
+{
+	return std::ranges::all_of(
+		word, [](const char c) { return std::isalpha(c) || c == ' ' || c == '\'' || c == '-'; });
+}
+
+std::string StringToLower(const std::string& str)
+{
+	std::string result;
+	for (const char ch : str)
+	{
+		result += static_cast<char>(std::tolower(ch));
+	}
+	return result;
+}
+
+void addToDictionary(Dictionary& dict, const std::string& key, const std::string& value)
+{
+	auto& entries = dict[key];
+	if (std::ranges::find(entries, value) == entries.end())
+	{
+		entries.push_back(value);
+	}
+}
+
+void ProcessRussianInput(const std::string& input, Dictionary& ruEnDict, bool& found)
+{
+	const std::string lowerInput = StringToLower(input);
+	const auto record = ruEnDict.find(lowerInput);
+	if (record != ruEnDict.end())
+	{
+		std::cout << record->second[0];
+		for (size_t i = 1; i < record->second.size(); ++i)
+		{
+			std::cout << ", " << record->second[i];
+		}
+		std::cout << std::endl;
+		found = true;
+	}
+}
+
+void ProcessEnglishInput(const std::string& input, Dictionary& enRuDict, bool& found)
+{
+	const std::string lowerInput = StringToLower(input);
+	const auto record = enRuDict.find(lowerInput);
+	if (record != enRuDict.end())
+	{
+		std::cout << record->second[0];
+		for (size_t i = 1; i < record->second.size(); ++i)
+		{
+			std::cout << ", " << record->second[i];
+		}
+		std::cout << std::endl;
+		found = true;
+	}
+}
+
+void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
+	const bool& isEng, bool& modified)
+{
+	std::cout << "Неизвестное слово \"" << input
+			  << "\". Введите перевод или пустую строку для отказа." << std::endl;
+
+	std::string translation;
+	getline(std::cin, translation);
+	if (translation.empty())
+	{
+		std::cout << "Слово \"" << input << "\" проигнорировано." << std::endl;
+		return;
+	}
+
+	std::string key;
+	std::string value;
+	if (isEng)
+	{
+		key = StringToLower(input);
+		addToDictionary(enRuDict, key, translation);
+		addToDictionary(ruEnDict, translation, key);
+	}
+	else
+	{
+		key = input;
+		addToDictionary(ruEnDict, key, translation);
+		addToDictionary(enRuDict, translation, key);
+	}
+	modified = true;
+	std::cout << "Слово \"" << input << "\" сохранено в словаре как \"" << translation << "\"."
+			  << std::endl;
+}
+
+void ProcessInput(
+	const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified)
+{
+	const bool isEng = IsEnglish(input);
+	bool wordFound = false;
+
+	if (isEng)
+	{
+		ProcessEnglishInput(input, enRuDict, wordFound);
+		if (wordFound)
+		{
+			return;
+		}
+	}
+
+	ProcessRussianInput(input, ruEnDict, wordFound);
+	if (wordFound)
+	{
+		return;
+	}
+
+	ProcessUnknownInput(input, enRuDict, ruEnDict, isEng, modified);
+}
+
+bool isEntryExists(const Dictionary& dict, const std::string& newKey, const std::string& newValue)
+{
+	const auto key = dict.find(newKey);
+	if (key != dict.end())
+	{
+		const auto& values = key->second;
+		return std::ranges::find(values, newValue) != values.end();
+	}
+	return false;
+}
+
+bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionary& ruEnDict)
+{
+	std::ifstream file(filename);
+	if (!file.is_open())
+	{
+		throw std::invalid_argument("ERROR");
+	}
+
+	std::string line;
+	while (getline(file, line))
+	{
+		size_t tabPos = line.find(' ');
+		if (tabPos == std::string::npos)
+		{
+			continue;
+		}
+
+		std::string key = line.substr(0, tabPos);
+		std::string value = line.substr(tabPos + 1);
+
+		if (IsEnglish(key))
+		{
+			if (!isEntryExists(enRuDict, key, value))
+			{
+				addToDictionary(enRuDict, key, value);
+				addToDictionary(ruEnDict, value, key);
+			}
+		}
+		else
+		{
+			if (!isEntryExists(ruEnDict, key, value))
+			{
+				addToDictionary(ruEnDict, key, value);
+				addToDictionary(enRuDict, value, key);
+			}
+		}
+	}
+	return true;
+}
+
+void SaveDictionary(
+	const std::string& filename, const Dictionary& enRuDict)
+{
+	std::ofstream file(filename);
+	if (!file.is_open())
+	{
+		throw std::invalid_argument("ERROR");
+	}
+
+	for (const auto& pair : enRuDict)
+	{
+		for (const std::string& value : pair.second)
+		{
+			file << pair.first << ' ' << value << '\n';
+		}
+	}
+}
