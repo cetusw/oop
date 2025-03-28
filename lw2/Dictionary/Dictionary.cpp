@@ -61,6 +61,20 @@ void ProcessEnglishInput(const std::string& input, Dictionary& enRuDict, bool& f
 	}
 }
 
+std::vector<std::string> SplitString(std::string input, const char delimiter)
+{
+	std::vector<std::string> result;
+
+	while (input.find(delimiter) != std::string::npos)
+	{
+		result.push_back(input.substr(0, input.find(delimiter)));
+		input.erase(0, input.find(delimiter) + 2);
+	}
+	result.push_back(input.substr(0, input.find(delimiter)));
+
+	return result;
+}
+
 void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
 	const bool& isEng, bool& modified)
 {
@@ -76,12 +90,15 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 	}
 
 	std::string key;
-	std::string value;
+	const std::vector<std::string> values = SplitString(translation, ',');
 	if (isEng)
 	{
 		key = StringToLower(input);
-		addToDictionary(enRuDict, key, translation);
-		addToDictionary(ruEnDict, translation, key);
+		for (const auto& value : values)
+		{
+			addToDictionary(enRuDict, key, value);
+			addToDictionary(ruEnDict, value, key);
+		}
 	}
 	else
 	{
@@ -140,7 +157,7 @@ bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionar
 	std::string line;
 	while (getline(file, line))
 	{
-		size_t tabPos = line.find(' ');
+		size_t tabPos = line.find('*');
 		if (tabPos == std::string::npos)
 		{
 			continue;
@@ -182,7 +199,7 @@ void SaveDictionary(
 	{
 		for (const std::string& value : pair.second)
 		{
-			file << pair.first << ' ' << value << '\n';
+			file << pair.first << '*' << value << '\n';
 		}
 	}
 }

@@ -12,8 +12,13 @@ std::string StringToLower(const std::string& str);
 
 void AddToDictionary(Dictionary& dict, const std::string& key, const std::string& value);
 
+std::vector<std::string> SplitString(std::string input, char delimiter);
+
 void ProcessInput(
 	const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified);
+
+void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
+	const bool& isEng, bool& modified);
 
 bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionary& ruEnDict);
 

@@ -1,4 +1,6 @@
-The Red Square Красная Площадь
-plane самолёт
-cat кошка
-cat кот
+институт ispring*институт ispring
+red square*Красная площадь
+dog*собака, кобель
+cat*кот
+car*машина
+car*автомобиль

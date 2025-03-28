@@ -1,7 +1,7 @@
-#include <fstream>
-#include "../HTMLDecoder.h"
-#include "../HTMLDecoderUtils.h"
-#include "catch2/catch_all.hpp"
+    #include <fstream>
+    #include "../HTMLDecoder.h"
+    #include "../HTMLDecoderUtils.h"
+    #include "catch2/catch_all.hpp"
 
 struct TestData
 {
