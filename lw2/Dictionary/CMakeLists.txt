@@ -11,7 +11,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(Dictionary Dictionary.cpp main.cpp)
+add_executable(Dictionary Dictionary.cpp main.cpp
+        DictionaryUtils.h)
 add_executable(dictionary-tests Dictionary.cpp Test/DictionaryTest.cpp)
 
 target_link_libraries(dictionary-tests PRIVATE Catch2::Catch2WithMain)

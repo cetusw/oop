@@ -1,4 +1,5 @@
 #include "Dictionary.h"
+#include "DictionaryUtils.h"
 
 #include <algorithm>
 #include <fstream>
@@ -111,7 +112,7 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 			  << std::endl;
 }
 
-void ProcessInput(
+void Translate(
 	const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified)
 {
 	const bool isEng = IsEnglish(input);

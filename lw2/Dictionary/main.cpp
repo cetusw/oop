@@ -31,7 +31,7 @@ int main(const int argc, char* argv[])
 					}
 					break;
 				}
-				ProcessInput(input, enRuDict, ruEnDict, modified);
+				Translate(input, enRuDict, ruEnDict, modified);
 			} while (true);
 		}
 		else
