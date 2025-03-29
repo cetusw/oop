@@ -11,6 +11,4 @@
 
 using Dictionary = std::unordered_map<std::string, std::set<std::string>>;
 
-// std::set добавить тесты +
-
 #endif //DICTIONARYTYPES_H

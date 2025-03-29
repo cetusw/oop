@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-bool IsEnglish(const std::string& word) // isAvailableForKey
+bool IsAvailableForKey(const std::string& word)
 {
 	return std::ranges::all_of(
 		word, [](const char c) { return std::isalpha(c) || c == ' ' || c == '\'' || c == '-'; });
@@ -21,7 +21,7 @@ std::string StringToLower(const std::string& str)
 	return result;
 }
 
-void AddToDictionary(Dictionary& dict, const std::string& key, const std::string& value) //
+void AddToDictionary(Dictionary& dict, const std::string& key, const std::string& value)
 {
 	auto& entries = dict[key];
 	entries.insert(value);
@@ -138,7 +138,7 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 void Translate(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
 	bool& modified) // добавить stdout
 {
-	const bool isEng = IsEnglish(input);
+	const bool isEng = IsAvailableForKey(input);
 	bool wordFound = false;
 
 	if (isEng)
@@ -190,7 +190,7 @@ bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionar
 		std::string key = line.substr(0, tabPos);
 		std::string value = line.substr(tabPos + 1);
 
-		if (IsEnglish(key))
+		if (IsAvailableForKey(key))
 		{
 			if (!isEntryExists(enRuDict, key, value))
 			{

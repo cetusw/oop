@@ -4,7 +4,7 @@
 
 #include <string>
 
-bool IsEnglish(const std::string& word);
+bool IsAvailableForKey(const std::string& word);
 
 bool isEntryExists(const Dictionary& dict, const std::string& newKey, const std::string& newValue);
 
