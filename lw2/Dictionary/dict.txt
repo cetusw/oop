@@ -1,6 +1,7 @@
-институт ispring*институт ispring
-red square*Красная площадь
-dog*собака, кобель
-cat*кот
+*й
 car*машина
 car*автомобиль
+cat*кот
+dog*собака, кобель
+red square*Красная площадь
+институт ispring*институт ispring

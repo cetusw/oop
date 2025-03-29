@@ -2,7 +2,6 @@
 #include "../DictionaryTypes.h"
 #include "catch2/catch_all.hpp"
 #include <fstream>
-
 #include <iostream>
 
 struct TestData

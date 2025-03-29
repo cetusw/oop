@@ -19,12 +19,15 @@ int main(const int argc, char* argv[])
 				getline(std::cin, input);
 				if (input == "...")
 				{
-					std::cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом." << std::endl;
-					char answer;
-					std::cin >> answer;
-					if (modified && (answer == 'y' || answer == 'Y'))
+					if (modified)
 					{
-						SaveDictionary(argv[1], enRuDict);
+						std::cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом." << std::endl;
+						char answer;
+						std::cin >> answer;
+						if (answer == 'y' || answer == 'Y')
+						{
+							SaveDictionary(argv[1], enRuDict);
+						}
 					}
 					break;
 				}
