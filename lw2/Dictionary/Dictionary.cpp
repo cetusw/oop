@@ -21,7 +21,7 @@ std::string StringToLower(const std::string& str)
 	return result;
 }
 
-void addToDictionary(Dictionary& dict, const std::string& key, const std::string& value) //
+void AddToDictionary(Dictionary& dict, const std::string& key, const std::string& value) //
 {
 	auto& entries = dict[key];
 	entries.insert(value);
@@ -104,15 +104,15 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 		key = StringToLower(input);
 		for (const auto& value : values)
 		{
-			addToDictionary(enRuDict, key, value);
-			addToDictionary(ruEnDict, value, key);
+			AddToDictionary(enRuDict, key, value);
+			AddToDictionary(ruEnDict, value, key);
 		}
 	}
 	else
 	{
 		key = input;
-		addToDictionary(ruEnDict, key, translation);
-		addToDictionary(enRuDict, translation, key);
+		AddToDictionary(ruEnDict, key, translation);
+		AddToDictionary(enRuDict, translation, key);
 	}
 	modified = true;
 	std::string finalTranslation;
@@ -194,16 +194,16 @@ bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionar
 		{
 			if (!isEntryExists(enRuDict, key, value))
 			{
-				addToDictionary(enRuDict, key, value);
-				addToDictionary(ruEnDict, value, key);
+				AddToDictionary(enRuDict, key, value);
+				AddToDictionary(ruEnDict, value, key);
 			}
 		}
 		else
 		{
 			if (!isEntryExists(ruEnDict, key, value))
 			{
-				addToDictionary(ruEnDict, key, value);
-				addToDictionary(enRuDict, value, key);
+				AddToDictionary(ruEnDict, key, value);
+				AddToDictionary(enRuDict, value, key);
 			}
 		}
 	}
