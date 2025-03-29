@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-bool IsEnglish(const std::string& word)
+bool IsEnglish(const std::string& word) // isAvailableForKey
 {
 	return std::ranges::all_of(
 		word, [](const char c) { return std::isalpha(c) || c == ' ' || c == '\'' || c == '-'; });
@@ -21,13 +21,10 @@ std::string StringToLower(const std::string& str)
 	return result;
 }
 
-void addToDictionary(Dictionary& dict, const std::string& key, const std::string& value)
+void addToDictionary(Dictionary& dict, const std::string& key, const std::string& value) //
 {
 	auto& entries = dict[key];
-	if (std::ranges::find(entries, value) == entries.end())
-	{
-		entries.push_back(value);
-	}
+	entries.insert(value);
 }
 
 void ProcessRussianInput(const std::string& input, Dictionary& ruEnDict, bool& found)
@@ -36,10 +33,15 @@ void ProcessRussianInput(const std::string& input, Dictionary& ruEnDict, bool& f
 	const auto record = ruEnDict.find(lowerInput);
 	if (record != ruEnDict.end())
 	{
-		std::cout << record->second[0];
-		for (size_t i = 1; i < record->second.size(); ++i)
+		auto it = record->second.begin();
+		while (it != record->second.end())
 		{
-			std::cout << ", " << record->second[i];
+			std::cout << *it;
+			++it;
+			if (it != record->second.end())
+			{
+				std::cout << ", ";
+			}
 		}
 		std::cout << std::endl;
 		found = true;
@@ -52,26 +54,31 @@ void ProcessEnglishInput(const std::string& input, Dictionary& enRuDict, bool& f
 	const auto record = enRuDict.find(lowerInput);
 	if (record != enRuDict.end())
 	{
-		std::cout << record->second[0];
-		for (size_t i = 1; i < record->second.size(); ++i)
+		auto it = record->second.begin();
+		while (it != record->second.end())
 		{
-			std::cout << ", " << record->second[i];
+			std::cout << *it;
+			++it;
+			if (it != record->second.end())
+			{
+				std::cout << ", ";
+			}
 		}
 		std::cout << std::endl;
 		found = true;
 	}
 }
 
-std::vector<std::string> SplitString(std::string input, const char delimiter)
+std::set<std::string> SplitString(std::string input, const char delimiter)
 {
-	std::vector<std::string> result;
+	std::set<std::string> result;
 
 	while (input.find(delimiter) != std::string::npos)
 	{
-		result.push_back(input.substr(0, input.find(delimiter)));
+		result.insert(input.substr(0, input.find(delimiter)));
 		input.erase(0, input.find(delimiter) + 2);
 	}
-	result.push_back(input.substr(0, input.find(delimiter)));
+	result.insert(input);
 
 	return result;
 }
@@ -91,7 +98,7 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 	}
 
 	std::string key;
-	const std::vector<std::string> values = SplitString(translation, ',');
+	const std::set<std::string> values = SplitString(translation, ',');
 	if (isEng)
 	{
 		key = StringToLower(input);
@@ -108,12 +115,28 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 		addToDictionary(enRuDict, translation, key);
 	}
 	modified = true;
-	std::cout << "Слово \"" << input << "\" сохранено в словаре как \"" << translation << "\"."
+	std::string finalTranslation;
+	bool isFirst = true;
+
+	for (const auto& value : values)
+	{
+		if (!isFirst)
+		{
+			finalTranslation += ", ";
+		}
+		else
+		{
+			isFirst = false;
+		}
+		finalTranslation += value;
+	}
+
+	std::cout << "Слово \"" << input << "\" сохранено в словаре как \"" << finalTranslation << "\"."
 			  << std::endl;
 }
 
-void Translate(
-	const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified)
+void Translate(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
+	bool& modified) // добавить stdout
 {
 	const bool isEng = IsEnglish(input);
 	bool wordFound = false;
@@ -187,8 +210,7 @@ bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionar
 	return true;
 }
 
-void SaveDictionary(
-	const std::string& filename, const Dictionary& enRuDict)
+void SaveDictionary(const std::string& filename, const Dictionary& enRuDict)
 {
 	std::ofstream file(filename);
 	if (!file.is_open())

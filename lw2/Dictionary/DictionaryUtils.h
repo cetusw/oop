@@ -12,7 +12,7 @@ std::string StringToLower(const std::string& str);
 
 void AddToDictionary(Dictionary& dict, const std::string& key, const std::string& value);
 
-std::vector<std::string> SplitString(std::string input, char delimiter);
+std::set<std::string> SplitString(std::string input, char delimiter);
 
 void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
 	const bool& isEng, bool& modified);

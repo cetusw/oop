@@ -1,5 +1,6 @@
 #include "../Dictionary.h"
 #include "../DictionaryTypes.h"
+#include "../DictionaryUtils.h"
 #include "catch2/catch_all.hpp"
 #include <fstream>
 #include <iostream>
@@ -36,7 +37,7 @@ void ProcessInputTest(const std::string& testString, const std::string& expected
 		std::cout.rdbuf(outputBuffer.rdbuf());
 		std::cin.rdbuf(inputBuffer.rdbuf());
 
-		ProcessInput(testString, testData.enRuDict, testData.ruEnDict, modified);
+		Translate(testString, testData.enRuDict, testData.ruEnDict, modified);
 
 		std::cout.rdbuf(origCout);
 		std::cin.rdbuf(origCin);
@@ -50,10 +51,10 @@ void ProcessInputTest(const std::string& testString, const std::string& expected
 		REQUIRE(actualOutput == expectedString);
 		if (modified)
 		{
-			REQUIRE(testData.enRuDict[testString] == std::vector<std::string>{SplitString(translation, ',')});
+			REQUIRE(testData.enRuDict[testString] == std::set<std::string>{SplitString(translation, ',')});
 			for (const auto& item : SplitString(translation, ','))
 			{
-				REQUIRE(testData.ruEnDict[item] == std::vector<std::string>{testString});
+				REQUIRE(testData.ruEnDict[item] == std::set<std::string>{testString});
 			}
 		}
 	}
@@ -86,12 +87,22 @@ TEST_CASE("ProcessInput tests")
 
 	ProcessInputTest("test",
 		"Неизвестное слово \"test\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"test\" сохранено в словаре как \"тест, испытание\".",
-		"Добавление нескольких переводов", "тест, испытание");
+		"Слово \"test\" сохранено в словаре как \"испытание, тест\".",
+		"Добавление нескольких переводов", "испытание, тест");
 
 	ProcessInputTest("same",
 		"Неизвестное слово \"same\". Введите перевод или пустую строку для отказа.\n"
 		"Слово \"same\" сохранено в словаре как \"same\".",
 		"Слово и перевод идентичны", "same");
+
+	ProcessInputTest("",
+		"Неизвестное слово \"\". Введите перевод или пустую строку для отказа.\n"
+		"Слово \"\" сохранено в словаре как \"пустая строка\".",
+		"Пустая строка", "пустая строка");
+
+	ProcessInputTest("test",
+		"Неизвестное слово \"test\". Введите перевод или пустую строку для отказа.\n"
+		"Слово \"test\" сохранено в словаре как \"тест\".",
+		"Два одинаковых слова в переводе", "тест, тест");
 
 }

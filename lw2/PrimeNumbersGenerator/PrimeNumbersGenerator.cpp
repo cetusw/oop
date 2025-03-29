@@ -31,7 +31,7 @@ std::set<int> GeneratePrimeNumbersSet(const int upperBound)
 		return primes;
 	}
 
-	std::vector<bool> sieve = Sieve(upperBound);
+	std::vector<bool> sieve = Sieve(upperBound); // оптимизировать. переименовать
 
 	primes.insert(2);
 	for (int i = 3; i <= upperBound; i += 2)

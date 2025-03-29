@@ -24,7 +24,7 @@ TEST_CASE("Count")
 	PrimeNumbersGeneratorCountTest(1, 0, "Один");
 	PrimeNumbersGeneratorCountTest(2, 1, "Два");
 	PrimeNumbersGeneratorCountTest(10, 4, "Какое-то рандомное число");
-	PrimeNumbersGeneratorCountTest(100000000, 5761455, "Макс значение");
+	PrimeNumbersGeneratorCountTest(100000000, 5761455, "Макс значение"); // только release
 	PrimeNumbersGeneratorCountTest(-1, 0, "Отрицательное значение");
 }
 

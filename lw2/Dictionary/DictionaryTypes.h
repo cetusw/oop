@@ -4,10 +4,13 @@
 
 #ifndef DICTIONARYTYPES_H
 #define DICTIONARYTYPES_H
+
+#include <set>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
-using Dictionary = std::unordered_map<std::string, std::vector<std::string>>;
+using Dictionary = std::unordered_map<std::string, std::set<std::string>>;
+
+// std::set добавить тесты +
 
 #endif //DICTIONARYTYPES_H
