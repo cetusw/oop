@@ -11,4 +11,4 @@
 
 using Dictionary = std::unordered_map<std::string, std::set<std::string>>;
 
-#endif //DICTIONARYTYPES_H
+#endif // DICTIONARYTYPES_H

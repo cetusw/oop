@@ -6,8 +6,8 @@
 
 #include "DictionaryTypes.h"
 
-void Translate(
-	const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified);
+void Translate(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified,
+	std::stringstream& outputStream, std::istream& inputStream);
 
 bool LoadDictionary(const std::string& filename, Dictionary& enRuDict, Dictionary& ruEnDict);
 

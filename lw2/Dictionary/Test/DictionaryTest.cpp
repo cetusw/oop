@@ -29,26 +29,12 @@ void ProcessInputTest(const std::string& testString, const std::string& expected
 		TestData testData;
 		bool modified = false;
 
-		std::streambuf* origCout = std::cout.rdbuf();
-		std::streambuf* origCin = std::cin.rdbuf();
-		std::stringstream outputBuffer;
-		std::stringstream inputBuffer(translation);
+		std::stringstream ss;
+		std::istringstream inputStream(translation);
 
-		std::cout.rdbuf(outputBuffer.rdbuf());
-		std::cin.rdbuf(inputBuffer.rdbuf());
+		Translate(testString, testData.enRuDict, testData.ruEnDict, modified, ss, inputStream);
 
-		Translate(testString, testData.enRuDict, testData.ruEnDict, modified);
-
-		std::cout.rdbuf(origCout);
-		std::cin.rdbuf(origCin);
-
-		std::string actualOutput = outputBuffer.str();
-		if (!actualOutput.empty() && actualOutput.back() == '\n')
-		{
-			actualOutput.pop_back();
-		}
-
-		REQUIRE(actualOutput == expectedString);
+		REQUIRE(ss.str() == expectedString);
 		if (modified)
 		{
 			REQUIRE(testData.enRuDict[testString] == std::set<std::string>{SplitString(translation, ',')});
@@ -70,39 +56,39 @@ TEST_CASE("ProcessInput tests")
 
 	ProcessInputTest("apple",
 		"Неизвестное слово \"apple\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"apple\" сохранено в словаре как \"яблоко\".",
+		"Слово \"apple\" сохранено в словаре как \"яблоко\".\n",
 		"Добавление нового слова", "яблоко");
 
 	ProcessInputTest("unknown",
 		"Неизвестное слово \"unknown\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"unknown\" проигнорировано.",
+		"Слово \"unknown\" проигнорировано.\n",
 		"Игнорирование неизвестного слова", "");
 
 	ProcessInputTest("CAT", "кот, кошка", "Поиск в верхнем регистре");
 
 	ProcessInputTest("bottle of water",
 		"Неизвестное слово \"bottle of water\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"bottle of water\" сохранено в словаре как \"бутылка воды\".",
+		"Слово \"bottle of water\" сохранено в словаре как \"бутылка воды\".\n",
 		"Добавление составного выражения", "бутылка воды");
 
 	ProcessInputTest("test",
 		"Неизвестное слово \"test\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"test\" сохранено в словаре как \"испытание, тест\".",
+		"Слово \"test\" сохранено в словаре как \"испытание, тест\".\n",
 		"Добавление нескольких переводов", "испытание, тест");
 
 	ProcessInputTest("same",
 		"Неизвестное слово \"same\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"same\" сохранено в словаре как \"same\".",
+		"Слово \"same\" сохранено в словаре как \"same\".\n",
 		"Слово и перевод идентичны", "same");
 
 	ProcessInputTest("",
 		"Неизвестное слово \"\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"\" сохранено в словаре как \"пустая строка\".",
+		"Слово \"\" сохранено в словаре как \"пустая строка\".\n",
 		"Пустая строка", "пустая строка");
 
 	ProcessInputTest("test",
 		"Неизвестное слово \"test\". Введите перевод или пустую строку для отказа.\n"
-		"Слово \"test\" сохранено в словаре как \"тест\".",
+		"Слово \"test\" сохранено в словаре как \"тест\".\n",
 		"Два одинаковых слова в переводе", "тест, тест");
 
 }

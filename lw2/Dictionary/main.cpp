@@ -1,7 +1,8 @@
 #include "Dictionary.h"
 
+#include <fstream>
 #include <iostream>
-#include <stdexcept>
+#include <sstream>
 
 int main(const int argc, char* argv[])
 {
@@ -10,6 +11,7 @@ int main(const int argc, char* argv[])
 		if (argc == 2)
 		{
 			std::string input;
+			std::stringstream output;
 			bool modified = false;
 			Dictionary enRuDict;
 			Dictionary ruEnDict;
@@ -21,7 +23,9 @@ int main(const int argc, char* argv[])
 				{
 					if (modified)
 					{
-						std::cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом." << std::endl;
+						std::cout << "В словарь были внесены изменения. Введите Y или y для "
+									 "сохранения перед выходом."
+								  << std::endl;
 						char answer;
 						std::cin >> answer;
 						if (answer == 'y' || answer == 'Y')
@@ -31,7 +35,7 @@ int main(const int argc, char* argv[])
 					}
 					break;
 				}
-				Translate(input, enRuDict, ruEnDict, modified);
+				Translate(input, enRuDict, ruEnDict, modified, output, std::cin);
 			} while (true);
 		}
 		else

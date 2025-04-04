@@ -4,6 +4,16 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <sstream>
+
+void PrintResponse(std::stringstream& ss)
+{
+	std::string line;
+	while (std::getline(ss, line))
+	{
+		std::cout << line << std::endl;
+	}
+}
 
 bool IsAvailableForKey(const std::string& word)
 {
@@ -27,46 +37,27 @@ void AddToDictionary(Dictionary& dict, const std::string& key, const std::string
 	entries.insert(value);
 }
 
-void ProcessRussianInput(const std::string& input, Dictionary& ruEnDict, bool& found)
+void ProcessInput(
+	const std::string& input, Dictionary& dictionary, bool& found, std::stringstream& outputStream)
 {
+	outputStream.clear();
 	const std::string lowerInput = StringToLower(input);
-	const auto record = ruEnDict.find(lowerInput);
-	if (record != ruEnDict.end())
+	const auto record = dictionary.find(lowerInput);
+	if (record != dictionary.end())
 	{
 		auto it = record->second.begin();
 		while (it != record->second.end())
 		{
-			std::cout << *it;
+			outputStream << *it;
 			++it;
 			if (it != record->second.end())
 			{
-				std::cout << ", ";
+				outputStream << ", ";
 			}
 		}
-		std::cout << std::endl;
 		found = true;
 	}
-}
-
-void ProcessEnglishInput(const std::string& input, Dictionary& enRuDict, bool& found)
-{
-	const std::string lowerInput = StringToLower(input);
-	const auto record = enRuDict.find(lowerInput);
-	if (record != enRuDict.end())
-	{
-		auto it = record->second.begin();
-		while (it != record->second.end())
-		{
-			std::cout << *it;
-			++it;
-			if (it != record->second.end())
-			{
-				std::cout << ", ";
-			}
-		}
-		std::cout << std::endl;
-		found = true;
-	}
+	PrintResponse(outputStream);
 }
 
 std::set<std::string> SplitString(std::string input, const char delimiter)
@@ -84,16 +75,20 @@ std::set<std::string> SplitString(std::string input, const char delimiter)
 }
 
 void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
-	const bool& isEng, bool& modified)
+	const bool& isEng, bool& modified, std::stringstream& outputStream, std::istream& inputStream)
 {
-	std::cout << "Неизвестное слово \"" << input
-			  << "\". Введите перевод или пустую строку для отказа." << std::endl;
+	outputStream.clear();
+	outputStream << "Неизвестное слово \"" << input
+				 << "\". Введите перевод или пустую строку для отказа." << std::endl;
+	PrintResponse(outputStream);
 
 	std::string translation;
-	getline(std::cin, translation);
+	getline(inputStream, translation);
 	if (translation.empty())
 	{
-		std::cout << "Слово \"" << input << "\" проигнорировано." << std::endl;
+		outputStream.clear();
+		outputStream << "Слово \"" << input << "\" проигнорировано." << std::endl;
+		PrintResponse(outputStream);
 		return;
 	}
 
@@ -131,32 +126,34 @@ void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Diction
 		finalTranslation += value;
 	}
 
-	std::cout << "Слово \"" << input << "\" сохранено в словаре как \"" << finalTranslation << "\"."
-			  << std::endl;
+	outputStream.clear();
+	outputStream << "Слово \"" << input << "\" сохранено в словаре как \"" << finalTranslation
+				 << "\"." << std::endl;
+	PrintResponse(outputStream);
 }
 
-void Translate(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
-	bool& modified) // добавить stdout
+void Translate(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict, bool& modified,
+	std::stringstream& outputStream, std::istream& inputStream)
 {
 	const bool isEng = IsAvailableForKey(input);
 	bool wordFound = false;
 
 	if (isEng)
 	{
-		ProcessEnglishInput(input, enRuDict, wordFound);
+		ProcessInput(input, enRuDict, wordFound, outputStream);
 		if (wordFound)
 		{
 			return;
 		}
 	}
 
-	ProcessRussianInput(input, ruEnDict, wordFound);
+	ProcessInput(input, ruEnDict, wordFound, outputStream);
 	if (wordFound)
 	{
 		return;
 	}
 
-	ProcessUnknownInput(input, enRuDict, ruEnDict, isEng, modified);
+	ProcessUnknownInput(input, enRuDict, ruEnDict, isEng, modified, outputStream, inputStream);
 }
 
 bool isEntryExists(const Dictionary& dict, const std::string& newKey, const std::string& newValue)

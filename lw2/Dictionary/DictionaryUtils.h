@@ -4,6 +4,8 @@
 
 #include <string>
 
+void PrintResponse(std::ifstream& file);
+
 bool IsAvailableForKey(const std::string& word);
 
 bool isEntryExists(const Dictionary& dict, const std::string& newKey, const std::string& newValue);
@@ -15,12 +17,9 @@ void AddToDictionary(Dictionary& dict, const std::string& key, const std::string
 std::set<std::string> SplitString(std::string input, char delimiter);
 
 void ProcessUnknownInput(const std::string& input, Dictionary& enRuDict, Dictionary& ruEnDict,
-	const bool& isEng, bool& modified);
+	const bool& isEng, bool& modified, std::stringstream& outputStream, std::istream& inputStream);
 
-void ProcessRussianInput(const std::string& input, Dictionary& ruEnDict, bool& found);
+void ProcessInput(
+	const std::string& input, Dictionary& dictionary, bool& found, std::stringstream& outputStream);
 
-void ProcessEnglishInput(const std::string& input, Dictionary& enRuDict, bool& found);
-
-
-
-#endif //DICTIONARYUTILS_H
+#endif // DICTIONARYUTILS_H

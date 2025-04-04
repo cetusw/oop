@@ -1,8 +1,13 @@
-институт ispring*институт ispring
-red square*Красная площадь
-dog*собака, кобель
+beer*пиво
+*й
+knife*нож
+car*автомобиль
+car*машина
 cat*кот
 cat*кошка
-car*машина
-car*автомобиль
-*й
+dog*собака, кобель
+red square*Красная площадь
+институт ispring*институт ispring
+kitten*киса
+good*очень хорошо
+good*хорошо
