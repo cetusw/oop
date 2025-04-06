@@ -54,7 +54,7 @@ std::set<int> GeneratePrimeNumbersSet(const int upperBound)
 		return primes;
 	}
 
-	const auto& basePrimes = FindBasePrimes(upperBound);
+	const std::set<int>& basePrimes = FindBasePrimes(upperBound);
 	const int segmentSize = static_cast<int>(std::sqrt(upperBound));
 
 	primes.insert(2);
