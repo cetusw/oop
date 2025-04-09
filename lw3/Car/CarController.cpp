@@ -8,10 +8,10 @@ CarController::CarController(Car& car)
 	: m_car(car)
 	, m_carCommands({
 		  { "Info", std::bind(&CarController::PrintCarInfo, this) },
-		  { "EngineOn", std::bind(&CarController::PrintCarInfo, this) },
-		  { "EngineOff", std::bind(&CarController::PrintCarInfo, this) },
-		  { "SetGear", std::bind(&CarController::PrintCarInfo, this) },
-		  { "SetSpeed", std::bind(&CarController::PrintCarInfo, this) },
+		  { "EngineOn", std::bind(&CarController::HandleTurnOnEngine, this) },
+		  { "EngineOff", std::bind(&CarController::HandleTurnOffEngine, this) },
+		  { "SetGear", std::bind(&CarController::HandleSetGear, this, std::placeholders::_1) },
+		  { "SetSpeed", std::bind(&CarController::HandleSetSpeed, this, std::placeholders::_1) },
 	  })
 {
 }
