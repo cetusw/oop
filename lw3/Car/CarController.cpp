@@ -6,48 +6,63 @@
 
 CarController::CarController(Car& car)
 	: m_car(car)
-	, m_carCommands({
-		  { "Info", std::bind(&CarController::PrintCarInfo, this) },
-		  { "EngineOn", std::bind(&CarController::HandleTurnOnEngine, this) },
-		  { "EngineOff", std::bind(&CarController::HandleTurnOffEngine, this) },
-		  { "SetGear", std::bind(&CarController::HandleSetGear, this, std::placeholders::_1) },
-		  { "SetSpeed", std::bind(&CarController::HandleSetSpeed, this, std::placeholders::_1) },
-	  })
+	, m_carCommands(
+		  { { "Info", [this](const std::vector<std::string>& args) { return PrintCarInfo(); } },
+			  { "EngineOn",
+				  [this](const std::vector<std::string>& args) { return HandleTurnOnEngine(); } },
+			  { "EngineOff",
+				  [this](const std::vector<std::string>& args) { return HandleTurnOffEngine(); } },
+			  { "SetGear",
+				  [this](const std::vector<std::string>& args) {
+					  if (args.empty())
+					  {
+						  return false;
+					  }
+					  return HandleSetGear(StringToInt(args[1]));
+				  } },
+			  { "SetSpeed", [this](const std::vector<std::string>& args) {
+				   if (args.empty())
+				   {
+					   return false;
+				   }
+				   return HandleSetSpeed(StringToInt(args[1]));
+			   } } })
 {
 }
 
-bool CarController::HandleCommand(std::string command)
+void CarController::HandleCommand()
 {
-	const std::vector<std::string> splittedCommand = SplitString(std::move(command));
-	const auto it = m_carCommands.find(splittedCommand[0]);
+	std::string command;
+	std::getline(std::cin, command);
+	const std::vector<std::string> args = SplitString(command);
+	const auto it = m_carCommands.find(args[0]);
 	if (it == m_carCommands.end())
 	{
 		std::cout << "Unknown command" << std::endl;
-		return false;
 	}
-	return it->second(StringToInt(splittedCommand[1]));
+	it->second(args);
 }
 
-bool CarController::PrintCarInfo() const
+void CarController::PrintCarInfo() const
 {
 	const std::string engineStatus = m_car.IsTurnedOn() ? "on" : "off";
 	std::string currentDirection;
-	switch (m_car.GetDirection())
+	switch (m_car.GetDirectionString())
 	{
-	case Direction::FORWARD:
+	case "STANDING_STILL":
+		currentDirection = "standing still";
+		break;
+	case "FORWARD":
 		currentDirection = "forward";
 		break;
-	case Direction::BACKWARD:
+	case "BACKWARD":
 		currentDirection = "backward";
-		break;
-	case Direction::STANDING_STILL:
-		currentDirection = "standing still";
+	default:;
 	}
 	std::cout << "Engine: " << engineStatus << std::endl
 			  << "Direction: " << currentDirection << std::endl
 			  << "Speed: " << m_car.GetSpeed() << std::endl
 			  << "Gear: " << m_car.GetGear() << std::endl;
-	return true;
 }
 bool CarController::HandleTurnOnEngine() const
 {
@@ -70,14 +85,13 @@ bool CarController::HandleSetSpeed(const int speed) const
 	return true;
 }
 
-std::vector<std::string> CarController::SplitString(std::string stringToSplit)
+std::vector<std::string> CarController::SplitString(std::string& stringToSplit)
 {
 	std::vector<std::string> result;
-
 	while (stringToSplit.find(' ') != std::string::npos)
 	{
 		result.push_back(stringToSplit.substr(0, stringToSplit.find(' ')));
-		stringToSplit.erase(0, stringToSplit.find(' ') + 2);
+		stringToSplit.erase(0, stringToSplit.find(' ') + 1);
 	}
 	result.push_back(stringToSplit);
 

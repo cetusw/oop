@@ -1,15 +1,14 @@
-#include <iostream>
-#include <string>
-
 #include "Car.h"
+#include "CarController.h"
 
 int main()
 {
     Car car;
-    std::string command;
-    while (std::cin >> command)
+	CarController carController(car);
+    while (true)
     {
-        car.ProcessInput(command);
+		carController.HandleCommand();
     }
 
+	return 0;
 }
