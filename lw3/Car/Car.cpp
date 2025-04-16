@@ -16,10 +16,7 @@ Car::Car()
 {
 }
 
-void Car::TurnOnEngine()
-{
-	m_isTurnedOn = true;
-}
+void Car::TurnOnEngine() { m_isTurnedOn = true; }
 
 void Car::TurnOffEngine()
 {
@@ -36,18 +33,9 @@ int Car::GetGear() const { return m_gear; }
 
 int Car::GetSpeed() const { return m_speed; }
 
-std::string Car::GetDirectionString() const
+Direction Car::GetDirection() const
 {
-	switch (m_direction)
-	{
-	case Direction::STANDING_STILL:
-		return "STANDING_STILL";
-	case Direction::FORWARD:
-		return "FORWARD";
-	case Direction::BACKWARD:
-		return "BACKWARD";
-	}
-	return "UNKNOWN";
+	return m_direction;
 }
 
 void Car::SetGear(const int gear)
@@ -65,13 +53,10 @@ void Car::SetGear(const int gear)
 	{
 		throw std::invalid_argument("Cannot reverse while moving");
 	}
-	if ((m_speed < availableSpeed->second.first || m_speed > availableSpeed->second.second) && availableSpeed->second.first != -1)
+	if ((m_speed < availableSpeed->second.first || m_speed > availableSpeed->second.second)
+		&& availableSpeed->second.first != -1)
 	{
 		throw std::invalid_argument("Unsuitable current speed");
-	}
-	if ((m_gear == -1 || m_gear == 0) && m_speed < 0 && gear >= 0)
-	{
-		throw std::invalid_argument("Cannot shift to forward gear while moving");
 	}
 	m_gear = gear;
 }
@@ -86,12 +71,13 @@ void Car::SetSpeed(int speed)
 	{
 		throw std::invalid_argument("Cannot set speed while engine is off");
 	}
-	if (m_gear == 0 && speed > m_speed)
+	if (m_gear == 0 && speed > std::abs(m_speed))
 	{
 		throw std::invalid_argument("Cannot accelerate on neutral");
 	}
 	const auto availableSpeed = m_gearToSpeed.find(m_gear);
-	if ((speed < availableSpeed->second.first || speed > availableSpeed->second.second) && availableSpeed->second.first != -1)
+	if ((speed < availableSpeed->second.first || speed > availableSpeed->second.second)
+		&& availableSpeed->second.first != -1)
 	{
 		throw std::invalid_argument("Speed is out of gear range");
 	}

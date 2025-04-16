@@ -3,12 +3,12 @@
 
 int main()
 {
-    Car car;
+	Car car;
 	CarController carController(car);
-    while (true)
-    {
+	while (true)
+	{
 		carController.HandleCommand();
-    }
+	}
 
 	return 0;
 }

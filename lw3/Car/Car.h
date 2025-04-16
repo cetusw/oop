@@ -4,6 +4,13 @@
 #include <functional>
 #include <unordered_map>
 
+enum class Direction // вынести
+	{
+	FORWARD,
+	BACKWARD,
+	STANDING_STILL
+};
+
 class Car
 {
 public:
@@ -19,19 +26,13 @@ public:
 
 	[[nodiscard]] int GetSpeed() const;
 
-	[[nodiscard]] std::string GetDirectionString() const;
+	[[nodiscard]] Direction GetDirection() const;
 
 	void SetGear(int gear);
 
 	void SetSpeed(int speed);
 
 private:
-	enum class Direction
-	{
-		FORWARD,
-		BACKWARD,
-		STANDING_STILL
-	};
 	int m_gear;
 	int m_speed;
 	Direction m_direction;

@@ -47,17 +47,19 @@ void CarController::PrintCarInfo() const
 {
 	const std::string engineStatus = m_car.IsTurnedOn() ? "on" : "off";
 	std::string currentDirection;
-	switch (m_car.GetDirectionString())
+	switch (m_car.GetDirection())
 	{
-	case "STANDING_STILL":
+	case Direction::STANDING_STILL:
 		currentDirection = "standing still";
 		break;
-	case "FORWARD":
+	case Direction::FORWARD:
 		currentDirection = "forward";
 		break;
-	case "BACKWARD":
+	case Direction::BACKWARD:
 		currentDirection = "backward";
-	default:;
+		break;
+	default:
+		throw std::invalid_argument("Invalid direction");
 	}
 	std::cout << "Engine: " << engineStatus << std::endl
 			  << "Direction: " << currentDirection << std::endl
@@ -110,3 +112,5 @@ int CarController::StringToInt(const std::string& string)
 		return -1;
 	}
 }
+
+// изучить отношения между классами
