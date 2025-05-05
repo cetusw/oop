@@ -13,10 +13,10 @@ void Snake::Act(Actors& actors)
 	if (actors.homer->SendMoney(GetAccountId(), stolenAmount))
 	{
 		std::cout << "Snake stole money from Homer's bank account\n";
-	}
-	if (SendCash(*actors.apu, stolenAmount))
-	{
-		std::cout << "Snake paid for Apu's products\n";
+		if (SendCash(*actors.apu, stolenAmount))
+		{
+			std::cout << "Snake paid for Apu's products\n";
+		}
 	}
 }
 
