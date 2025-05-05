@@ -29,13 +29,6 @@ private:
 
 	std::unique_ptr<Bank> m_bank;
 
-	AccountId m_homerAccount;
-	AccountId m_margeAccount;
-	AccountId m_apuAccount;
-	AccountId m_mrBurnsAccount;
-	AccountId m_snakeAccount;
-	AccountId m_smithersAccount;
-
 	std::unique_ptr<Homer> m_homer;
 	std::unique_ptr<Marge> m_marge;
 	std::unique_ptr<Bart> m_bart;

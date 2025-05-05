@@ -6,6 +6,8 @@
 using AccountId = unsigned long long;
 using Money = long long;
 
+constexpr AccountId NO_ACCOUNT = 0;
+
 class BankOperationError final : public std::runtime_error
 {
 public:

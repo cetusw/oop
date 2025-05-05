@@ -51,6 +51,6 @@ Money ActorWithBankAccount::CloseAccount()
 {
 	const Money balance = m_bank.CloseAccount(m_accountId);
 	AddCash(balance);
-	m_accountId = 0;
+	m_accountId = NO_ACCOUNT;
 	return balance;
 }

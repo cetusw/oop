@@ -18,12 +18,6 @@ classDiagram
     }
     class Simulation {
         -std::unique_ptr~Bank~ m_bank
-        -AccountId m_homerAccount
-        -AccountId m_margeAccount
-        -AccountId m_apuAccount
-        -AccountId m_mrBurnsAccount
-        -AccountId m_snakeAccount
-        -AccountId m_smithersAccount
         -std::unique_ptr~Homer~ m_homer
         -std::unique_ptr~Marge~ m_marge
         -std::unique_ptr~Bart~ m_bart
@@ -123,4 +117,13 @@ classDiagram
     Snake --|> ActorWithBankAccount
     Snake ..> Actors
     Actor ..> Bank
+    Simulation ..> Apu
+    Simulation ..> Bart
+    Simulation ..> Homer
+    Simulation ..> Liza
+    Simulation ..> MrBurns
+    Simulation ..> Marge
+    Simulation ..> Nelson
+    Simulation ..> Smithers
+    Simulation ..> Snake
 ```

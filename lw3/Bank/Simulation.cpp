@@ -12,22 +12,22 @@ Simulation::Simulation(const Money homerInitialCash, const Money margeInitialCas
 {
 	m_bank = std::make_unique<Bank>(m_initialCash);
 
-	m_homer = std::make_unique<Homer>(homerInitialCash, 0, *m_bank);
-	m_marge = std::make_unique<Marge>(margeInitialCash, 0, *m_bank);
+	m_homer = std::make_unique<Homer>(homerInitialCash, NO_ACCOUNT, *m_bank);
+	m_marge = std::make_unique<Marge>(margeInitialCash, NO_ACCOUNT, *m_bank);
 	m_bart = std::make_unique<Bart>(bartInitialCash);
 	m_liza = std::make_unique<Liza>(lizaInitialCash);
-	m_apu = std::make_unique<Apu>(apuInitialCash, 0, *m_bank);
-	m_mrBurns = std::make_unique<MrBurns>(mrBurnsInitialCash, 0, *m_bank);
+	m_apu = std::make_unique<Apu>(apuInitialCash, NO_ACCOUNT, *m_bank);
+	m_mrBurns = std::make_unique<MrBurns>(mrBurnsInitialCash, NO_ACCOUNT, *m_bank);
 	m_nelson = std::make_unique<Nelson>(nelsonInitialCash);
-	m_snake = std::make_unique<Snake>(snakeInitialCash, 0, *m_bank);
-	m_smithers = std::make_unique<Smithers>(smithersInitialCash, 0, *m_bank);
+	m_snake = std::make_unique<Snake>(snakeInitialCash, NO_ACCOUNT, *m_bank);
+	m_smithers = std::make_unique<Smithers>(smithersInitialCash, NO_ACCOUNT, *m_bank);
 
-	m_homerAccount = m_homer->OpenAccount();
-	m_margeAccount = m_marge->OpenAccount();
-	m_apuAccount = m_apu->OpenAccount();
-	m_mrBurnsAccount = m_mrBurns->OpenAccount();
-	m_snakeAccount = m_snake->OpenAccount();
-	m_smithersAccount = m_smithers->OpenAccount();
+	m_homer->OpenAccount();
+	m_marge->OpenAccount();
+	m_apu->OpenAccount();
+	m_mrBurns->OpenAccount();
+	m_snake->OpenAccount();
+	m_smithers->OpenAccount();
 
 	m_actors.homer = std::move(m_homer);
 	m_actors.marge = std::move(m_marge);
