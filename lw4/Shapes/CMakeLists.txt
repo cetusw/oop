@@ -3,6 +3,8 @@ project(Shapes)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(GTest REQUIRED)
+
 add_executable(Shapes main.cpp
         Point.h
         Interface/IShape.h
@@ -21,4 +23,20 @@ add_executable(Shapes main.cpp
         Shape/Shape.h
         Shape/SolidShape.cpp
         Shape/SolidShape.h
-        Size.h)
+        Size.h
+)
+
+add_executable(shapes-tests
+        Test/ShapesTest.cpp
+)
+
+target_link_libraries(shapes-tests
+        PRIVATE
+        GTest::GTest
+        GTest::Main
+)
+
+target_include_directories(shapes-tests
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)

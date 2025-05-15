@@ -50,6 +50,7 @@ void ShapeController::WriteShapes()
 		std::cout << shape->ToString() << std::endl;
 	}
 }
+
 void ShapeController::PrintBiggestAreaShape()
 {
 	Shape* biggestAreaShape = m_shapes.front().get();
@@ -62,6 +63,7 @@ void ShapeController::PrintBiggestAreaShape()
 	}
 	std::cout << biggestAreaShape->ToString() << std::endl;
 }
+
 void ShapeController::PrintShortestPerimeterShape()
 {
 	Shape* shortestPerimetrShape = m_shapes.front().get();

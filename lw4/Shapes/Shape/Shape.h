@@ -11,6 +11,7 @@ public:
 	uint32_t GetOutlineColor() override;
 
 private:
+	static std::string Uint32ToHexString(uint32_t value);
 	uint32_t m_outlineColor;
 };
 
