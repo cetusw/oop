@@ -2,10 +2,11 @@
 #define SHAPE_H
 #include "../Interface/IShape.h"
 
-class Shape : public virtual IShape
+class Shape : virtual public IShape
 {
 public:
 	explicit Shape(uint32_t outlineColor);
+
 	std::string ToString() override;
 	uint32_t GetOutlineColor() override;
 

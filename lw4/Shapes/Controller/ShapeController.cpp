@@ -1,7 +1,3 @@
-//
-// Created by cetus on 5/5/25.
-//
-
 #include "ShapeController.h"
 
 #include "../Shape/Circle.h"
@@ -25,24 +21,58 @@ ShapeController::ShapeController(std::istream& input)
 void ShapeController::ReadShapes()
 {
 	std::string command;
-	m_input >> command;
+	while (m_input >> command && command != "...")
+	{
+		const auto it = m_commands.find(command);
+		if (it != m_commands.end())
+		{
+			try
+			{
+				it->second();
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
+		}
+		else
+		{
+			std::cerr << "Command not found" << std::endl;
+		}
+		std::cout << command << std::endl;
+	}
+}
 
-	const auto it = m_commands.find(command);
-	if (it != m_commands.end())
+void ShapeController::WriteShapes()
+{
+	for (const auto& shape : m_shapes)
 	{
-		try
+		std::cout << shape->ToString() << std::endl;
+	}
+}
+void ShapeController::PrintBiggestAreaShape()
+{
+	Shape* biggestAreaShape = m_shapes.front().get();
+	for (const auto& shape : m_shapes)
+	{
+		if (shape->GetArea() > biggestAreaShape->GetArea())
 		{
-			it->second();
-		}
-		catch (const std::exception& e)
-		{
-			std::cerr << e.what() << std::endl;
+			biggestAreaShape = shape.get();
 		}
 	}
-	else
+	std::cout << biggestAreaShape->ToString() << std::endl;
+}
+void ShapeController::PrintShortestPerimeterShape()
+{
+	Shape* shortestPerimetrShape = m_shapes.front().get();
+	for (const auto& shape : m_shapes)
 	{
-		std::cerr << "Command not found" << std::endl;
+		if (shape->GetPerimeter() < shortestPerimetrShape->GetPerimeter())
+		{
+			shortestPerimetrShape = shape.get();
+		}
 	}
+	std::cout << shortestPerimetrShape->ToString() << std::endl;
 }
 
 void ShapeController::AddCircle()
@@ -97,6 +127,8 @@ void ShapeController::AddRectangle()
 
 	m_shapes.emplace_back(std::make_unique<Rectangle>(Point(leftTopX, leftTopY),
 		Point(rightBottomX, rightBottomY), outlineColorUint32, fillColorUint32));
+
+	std::cout << leftTopX << " " << leftTopY << std::endl;
 }
 
 void ShapeController::AddTriangle()

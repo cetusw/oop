@@ -3,13 +3,19 @@
 #include "../Point.h"
 #include "Shape.h"
 
-class LineSegment : public Shape
+class LineSegment final : public Shape
 {
 public:
 	LineSegment(Point startPoint, Point endPoint, uint32_t outlineColor);
+
+	double GetArea() override;
+	double GetPerimeter() override;
+	uint32_t GetOutlineColor() override;
+	std::string ToString() override;
+
 	[[nodiscard]] Point GetStartPoint() const;
 	[[nodiscard]] Point GetEndPoint() const;
-	[[nodiscard]] double GetLength() const;
+
 
 private:
 	Point m_startPoint{};

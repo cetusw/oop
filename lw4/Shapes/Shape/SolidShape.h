@@ -7,6 +7,7 @@ class SolidShape : public virtual ISolidShape, public Shape
 {
 public:
 	explicit SolidShape(uint32_t outlineColor, uint32_t fillColor);
+
 	[[nodiscard]] uint32_t GetFillColor() const override;
 
 private:

@@ -16,7 +16,6 @@ public:
 	virtual double GetArea() = 0;
 	virtual double GetPerimeter() = 0;
 	virtual uint32_t GetOutlineColor() = 0;
-	virtual void GetInfo() = 0;
 };
 
 #endif // ISHAPE_H

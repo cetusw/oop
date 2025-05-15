@@ -3,15 +3,20 @@
 #include "SolidShape.h"
 #include "../Point.h"
 
-class Triangle : public SolidShape
+class Triangle final : public SolidShape
 {
 public:
     Triangle(Point vertex1, Point vertex2, Point vertex3, uint32_t outlineColor, uint32_t fillColor);
+
+	double GetArea() override;
+	double GetPerimeter() override;
+	uint32_t GetOutlineColor() override;
+	[[nodiscard]] uint32_t GetFillColor() const override;
+	std::string ToString() override;
+
     [[nodiscard]] Point GetVertex1() const;
     [[nodiscard]] Point GetVertex2() const;
     [[nodiscard]] Point GetVertex3() const;
-	double GetArea() override;
-	double GetPerimeter() override;
 
 private:
 	Point m_vertex1;

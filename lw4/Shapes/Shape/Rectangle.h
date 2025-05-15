@@ -3,16 +3,21 @@
 #include "SolidShape.h"
 #include "../Point.h"
 
-class Rectangle : public SolidShape
+class Rectangle final : public SolidShape
 {
 public:
     Rectangle(Point leftTop, Point rightBottom, uint32_t outlineColor, uint32_t fillColor);
+
+	double GetArea() override;
+	double GetPerimeter() override;
+	uint32_t GetOutlineColor() override;
+	[[nodiscard]] uint32_t GetFillColor() const override;
+	std::string ToString() override;
+
     [[nodiscard]] Point GetLeftTop() const;
     [[nodiscard]] Point GetRightBottom() const;
     [[nodiscard]] double GetWidth() const;
     [[nodiscard]] double GetHeight() const;
-	double GetArea() override;
-	double GetPerimeter() override;
 
 private:
 	Point m_leftTop;
