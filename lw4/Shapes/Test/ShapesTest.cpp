@@ -6,28 +6,6 @@
 
 #include <gtest/gtest.h>
 
-// EXPECT_EQ(shape.ToString(),
-// 	"Area: " + std::to_string(area) + "\n" + "Perimetr: " + std::to_string(perimeter) + "\n"
-// 		+ "OutlineColor: " + std::to_string(outlineColor + "\n" + "FillColor: " + fillColor + "\n");
-
-uint32_t StringToUint32(const std::string& string)
-{
-	if (string.length() != 6)
-	{
-		throw std::invalid_argument("Invalid color string");
-	}
-
-	return std::stoul(string, nullptr, 16);
-}
-
-void ShapeTest(std::stringstream& ss)
-{
-	ShapeController shapeController(ss);
-	shapeController.ReadShapes();
-	shapeController.PrintBiggestAreaShape();
-	shapeController.PrintShortestPerimeterShape();
-}
-
 void CircleTest(const Point center, const double radius, const uint32_t outlineColor,
 	const uint32_t fillColor, const double perimeter, const double area,
 	const std::string& expectedException = "")
@@ -110,7 +88,9 @@ TEST(CircleTest, PositiveAndNegativeCenter)
 }
 
 TEST(LineSegmentTest, Zero) { LineSegmentTest({ 0, 0 }, { 0, 0 }, 0x000000, 0, 0); }
-TEST(LineSegmentTest, Normal) { LineSegmentTest({ 1, 1 }, { 7, 9 }, 0x000000, 10, 10); }
+TEST(LineSegmentTest, Diagonal) { LineSegmentTest({ 1, 1 }, { 7, 9 }, 0x000000, 10, 10); }
+TEST(LineSegmentTest, Vertical) { LineSegmentTest({ 1, 1 }, { 10, 1 }, 0x000000, 9, 9); }
+TEST(LineSegmentTest, Horizontal) { LineSegmentTest({ 1, 1 }, { 1, 10 }, 0x000000, 9, 9); }
 TEST(LineSegmentTest, NegativePoints) { LineSegmentTest({ -4, -3 }, { 0, 0 }, 0x000000, 5, 5); }
 
 TEST(RectangleTest, Zero) { RectangleTest({ 0, 0 }, { 0, 0 }, 0x000000, 0x000000, 0, 0, 0, 0); }
@@ -119,8 +99,14 @@ TEST(RectangleTest, NegativePoints)
 {
 	RectangleTest({ -4, -3 }, { 0, 0 }, 0x000000, 0x000000, 14, 12, 3, 4);
 }
+TEST(RectangleTest, Inverted) { RectangleTest({ 5, 5 }, { 0, 0 }, 0x000000, 0x000000, 20, 25, 5, 5); }
+
 
 TEST(TriangleTest, Zero) { TriangleTest({ 0, 0 }, { 0, 0 }, { 0, 0 }, 0x000000, 0x000000, 0, 0); }
 TEST(TriangleTest, Rect) { TriangleTest({ 0, 0 }, { 3, 4 }, { 3, 0 }, 0x000000, 0x000000, 12, 6); }
 TEST(TriangleTest, Isosceles) { TriangleTest({ 0, 3 }, { 4, 6 }, { 4, 0 }, 0x000000, 0x000000, 16, 12); }
 TEST(TriangleTest, Equilateral) { TriangleTest({ 0, 5 }, { 8.660254037844386, 10 }, { 8.660254037844386, 0 }, 0x000000, 0x000000, 30, 43.301270189221924); }
+TEST(TriangleTest, DegenerateTriangle) { TriangleTest({ 0, 0 }, { 0, 5 }, { 0, 10 }, 0x000000, 0x000000, 20, 0); }
+
+
+

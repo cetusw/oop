@@ -40,7 +40,6 @@ void ShapeController::ReadShapes()
 		{
 			std::cerr << "Command not found" << std::endl;
 		}
-		std::cout << command << std::endl;
 	}
 }
 
@@ -52,7 +51,7 @@ void ShapeController::WriteShapes()
 	}
 }
 
-void ShapeController::PrintBiggestAreaShape()
+std::string ShapeController::PrintBiggestAreaShape()
 {
 	const auto it = std::ranges::max_element(m_shapes,
 		[](const auto& shape1, const auto& shape2)
@@ -60,11 +59,13 @@ void ShapeController::PrintBiggestAreaShape()
 			return shape1->GetArea() < shape2->GetArea();
 		}
 	);
-	std::cout << (*it)->ToString() << std::endl;
+	std::string result = (*it)->ToString();
+	std::cout << result << std::endl;
+	return result;
 }
 // TODO: max_element min_element ++
 
-void ShapeController::PrintShortestPerimeterShape()
+std::string ShapeController::PrintShortestPerimeterShape()
 {
 	const auto it = std::ranges::max_element(m_shapes,
 		[](const auto& shape1, const auto& shape2)
@@ -72,7 +73,9 @@ void ShapeController::PrintShortestPerimeterShape()
 			return shape1->GetPerimeter() > shape2->GetPerimeter();
 		}
 	);
-	std::cout << (*it)->ToString() << std::endl;
+	std::string result = (*it)->ToString();
+	std::cout << result << std::endl;
+	return result;
 }
 
 void ShapeController::AddCircle()
@@ -127,8 +130,6 @@ void ShapeController::AddRectangle()
 
 	m_shapes.emplace_back(std::make_unique<Rectangle>(Point(leftTopX, leftTopY),
 		Point(rightBottomX, rightBottomY), outlineColorUint32, fillColorUint32));
-
-	std::cout << leftTopX << " " << leftTopY << std::endl;
 }
 
 void ShapeController::AddTriangle()

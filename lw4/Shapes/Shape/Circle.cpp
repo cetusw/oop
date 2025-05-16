@@ -1,5 +1,5 @@
 #include "Circle.h"
-
+#include <cmath>
 #include <stdexcept>
 
 Circle::Circle(
@@ -14,9 +14,9 @@ Circle::Circle(
 	}
 }
 
-double Circle::GetArea() { return std::numbers::pi * m_radius * m_radius; }
+double Circle::GetArea() { return M_PI * m_radius * m_radius; }
 
-double Circle::GetPerimeter() { return 2 * std::numbers::pi * m_radius; }
+double Circle::GetPerimeter() { return 2 * M_PI * m_radius; }
 
 Point Circle::GetCenter() const { return m_center; }
 

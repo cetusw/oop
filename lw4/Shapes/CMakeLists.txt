@@ -46,6 +46,7 @@ add_executable(shapes-tests
         Shape/SolidShape.cpp
         Shape/SolidShape.h
         Size.h
+        Test/ShapeControllerTest.cpp
 )
 
 target_link_libraries(shapes-tests

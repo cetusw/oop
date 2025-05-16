@@ -12,9 +12,9 @@ Point Rectangle::GetLeftTop() const { return m_leftTop; }
 
 Point Rectangle::GetRightBottom() const { return m_rightBottom; }
 
-double Rectangle::GetWidth() const { return m_rightBottom.y - m_leftTop.y; }
+double Rectangle::GetWidth() const { return std::abs(m_rightBottom.y - m_leftTop.y); }
 
-double Rectangle::GetHeight() const { return m_rightBottom.x - m_leftTop.x; }
+double Rectangle::GetHeight() const { return std::abs(m_rightBottom.x - m_leftTop.x); }
 
 double Rectangle::GetArea() { return GetWidth() * GetHeight(); }
 

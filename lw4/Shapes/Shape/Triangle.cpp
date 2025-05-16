@@ -21,7 +21,7 @@ double Triangle::GetArea()
 {
 	return std::abs(0.5
 		* ((m_vertex1.x - m_vertex3.x) * (m_vertex2.y - m_vertex3.y)
-			- (m_vertex2.x - m_vertex3.x) * (m_vertex2.y - m_vertex3.y)));
+			- (m_vertex2.x - m_vertex3.x) * (m_vertex1.y - m_vertex3.y)));
 }
 
 double Triangle::GetPerimeter()

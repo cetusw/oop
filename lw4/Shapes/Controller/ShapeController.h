@@ -18,9 +18,9 @@ public:
 
 	void WriteShapes();
 
-    void PrintBiggestAreaShape();
+    std::string PrintBiggestAreaShape();
 
-	void PrintShortestPerimeterShape();
+	std::string PrintShortestPerimeterShape();
 
 	void AddCircle();
 
