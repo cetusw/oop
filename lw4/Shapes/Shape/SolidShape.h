@@ -3,7 +3,7 @@
 #include "../Interface/ISolidShape.h"
 #include "Shape.h"
 
-class SolidShape : public virtual ISolidShape, public Shape
+class SolidShape : public ISolidShape, public Shape
 {
 public:
 	explicit SolidShape(uint32_t outlineColor, uint32_t fillColor);
@@ -15,3 +15,5 @@ private:
 };
 
 #endif // SOLIDSHAPE_H
+
+// TODO: разобраться с virtual ++ (проблема ромба, посмотреть на диаграмму, создание двух копий)

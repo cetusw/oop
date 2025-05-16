@@ -34,8 +34,6 @@ private:
 	static uint32_t StringToUint32(const std::string& string);
 
 	std::vector<std::unique_ptr<Shape>> m_shapes;
-	std::unique_ptr<Shape> m_biggestAreaShape;
-	std::unique_ptr<Shape> m_shortestPerimeterShape;
 	std::istream& m_input;
 	std::unordered_map<std::string, std::function<void()>> m_commands;
 };

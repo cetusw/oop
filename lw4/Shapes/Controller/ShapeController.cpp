@@ -5,6 +5,7 @@
 #include "../Shape/Rectangle.h"
 #include "../Shape/Triangle.h"
 
+#include <bits/ranges_algo.h>
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
@@ -53,28 +54,25 @@ void ShapeController::WriteShapes()
 
 void ShapeController::PrintBiggestAreaShape()
 {
-	Shape* biggestAreaShape = m_shapes.front().get();
-	for (const auto& shape : m_shapes)
-	{
-		if (shape->GetArea() > biggestAreaShape->GetArea())
+	const auto it = std::ranges::max_element(m_shapes,
+		[](const auto& shape1, const auto& shape2)
 		{
-			biggestAreaShape = shape.get();
+			return shape1->GetArea() < shape2->GetArea();
 		}
-	}
-	std::cout << biggestAreaShape->ToString() << std::endl;
+	);
+	std::cout << (*it)->ToString() << std::endl;
 }
+// TODO: max_element min_element ++
 
 void ShapeController::PrintShortestPerimeterShape()
 {
-	Shape* shortestPerimetrShape = m_shapes.front().get();
-	for (const auto& shape : m_shapes)
-	{
-		if (shape->GetPerimeter() < shortestPerimetrShape->GetPerimeter())
+	const auto it = std::ranges::max_element(m_shapes,
+		[](const auto& shape1, const auto& shape2)
 		{
-			shortestPerimetrShape = shape.get();
+			return shape1->GetPerimeter() > shape2->GetPerimeter();
 		}
-	}
-	std::cout << shortestPerimetrShape->ToString() << std::endl;
+	);
+	std::cout << (*it)->ToString() << std::endl;
 }
 
 void ShapeController::AddCircle()

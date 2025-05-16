@@ -6,7 +6,6 @@ class ISolidShape : virtual public IShape
 {
 public:
 	[[nodiscard]] virtual uint32_t GetFillColor() const = 0;
-
 };
 
 #endif // ISOLIDSHAPE_H

@@ -20,8 +20,4 @@ double Rectangle::GetArea() { return GetWidth() * GetHeight(); }
 
 double Rectangle::GetPerimeter() { return 2 * (GetWidth() + GetHeight()); }
 
-uint32_t Rectangle::GetOutlineColor() { return SolidShape::GetOutlineColor(); }
-
-uint32_t Rectangle::GetFillColor() const { return SolidShape::GetFillColor(); }
-
-std::string Rectangle::ToString() { return SolidShape::ToString(); }
+// TODO: убрать реализацию ++

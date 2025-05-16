@@ -10,9 +10,6 @@ public:
 
 	double GetArea() override;
 	double GetPerimeter() override;
-	uint32_t GetOutlineColor() override;
-	[[nodiscard]] uint32_t GetFillColor() const override;
-	std::string ToString() override;
 
     [[nodiscard]] Point GetVertex1() const;
     [[nodiscard]] Point GetVertex2() const;

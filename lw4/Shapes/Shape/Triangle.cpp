@@ -16,6 +16,7 @@ Point Triangle::GetVertex1() const { return m_vertex1; }
 Point Triangle::GetVertex2() const { return m_vertex2; }
 
 Point Triangle::GetVertex3() const { return m_vertex3; }
+
 double Triangle::GetArea()
 {
 	return 0.5
@@ -31,9 +32,3 @@ double Triangle::GetPerimeter()
 
 	return line1.GetPerimeter() + line2.GetPerimeter() + line3.GetPerimeter();
 }
-
-uint32_t Triangle::GetOutlineColor() { return SolidShape::GetOutlineColor(); }
-
-uint32_t Triangle::GetFillColor() const { return SolidShape::GetFillColor(); }
-
-std::string Triangle::ToString() { return SolidShape::ToString(); }

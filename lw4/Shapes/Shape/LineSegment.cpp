@@ -15,10 +15,6 @@ double LineSegment::GetPerimeter()
 	return std::hypot((m_endPoint.x - m_startPoint.x), (m_endPoint.y - m_startPoint.y));
 }
 
-uint32_t LineSegment::GetOutlineColor() { return Shape::GetOutlineColor(); }
-
-std::string LineSegment::ToString() { return Shape::ToString(); }
-
 Point LineSegment::GetStartPoint() const { return m_startPoint; }
 
 Point LineSegment::GetEndPoint() const { return m_endPoint; }

@@ -10,8 +10,6 @@ public:
 
 	double GetArea() override;
 	double GetPerimeter() override;
-	uint32_t GetOutlineColor() override;
-	std::string ToString() override;
 
 	[[nodiscard]] Point GetStartPoint() const;
 	[[nodiscard]] Point GetEndPoint() const;
