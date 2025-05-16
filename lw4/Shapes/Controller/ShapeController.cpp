@@ -5,7 +5,7 @@
 #include "../Shape/Rectangle.h"
 #include "../Shape/Triangle.h"
 
-#include <bits/ranges_algo.h>
+#include <algorithm>
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
