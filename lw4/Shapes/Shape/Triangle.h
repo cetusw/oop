@@ -14,6 +14,7 @@ public:
     [[nodiscard]] Point GetVertex1() const;
     [[nodiscard]] Point GetVertex2() const;
     [[nodiscard]] Point GetVertex3() const;
+	void Draw(ICanvas& canvas) override;
 
 private:
 	Point m_vertex1;

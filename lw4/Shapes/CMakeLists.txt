@@ -4,6 +4,7 @@ project(Shapes)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(GTest REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 add_executable(Shapes main.cpp
         Point.h
@@ -24,6 +25,10 @@ add_executable(Shapes main.cpp
         Shape/SolidShape.cpp
         Shape/SolidShape.h
         Size.h
+        Interface/ICanvas.h
+        Interface/ICanvasDrawable.h
+        Canvas/Canvas.cpp
+        Canvas/Canvas.h
 )
 
 add_executable(shapes-tests
@@ -47,6 +52,12 @@ add_executable(shapes-tests
         Shape/SolidShape.h
         Size.h
         Test/ShapeControllerTest.cpp
+)
+
+target_link_libraries(Shapes
+        sfml-graphics
+        sfml-window
+        sfml-system
 )
 
 target_link_libraries(shapes-tests

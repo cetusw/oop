@@ -1,6 +1,8 @@
 #ifndef SHAPECONTROLLER_H
 #define SHAPECONTROLLER_H
 
+#include "../Canvas/Canvas.h"
+
 #include <functional>
 #include <memory>
 #include <unordered_map>
@@ -29,6 +31,8 @@ public:
 	void AddRectangle();
 
 	void AddTriangle();
+
+	void DrawShapes(sf::RenderWindow& window);
 
 private:
 	static uint32_t StringToUint32(const std::string& string);

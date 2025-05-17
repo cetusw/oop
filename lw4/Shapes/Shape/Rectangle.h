@@ -15,6 +15,7 @@ public:
     [[nodiscard]] Point GetRightBottom() const;
     [[nodiscard]] double GetWidth() const;
     [[nodiscard]] double GetHeight() const;
+	void Draw(ICanvas& canvas) override;
 
 private:
 	Point m_leftTop;

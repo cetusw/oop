@@ -1,5 +1,6 @@
 #include "ShapeController.h"
 
+#include "../Canvas/Canvas.h"
 #include "../Shape/Circle.h"
 #include "../Shape/LineSegment.h"
 #include "../Shape/Rectangle.h"
@@ -67,7 +68,7 @@ std::string ShapeController::PrintBiggestAreaShape()
 
 std::string ShapeController::PrintShortestPerimeterShape()
 {
-	const auto it = std::ranges::max_element(m_shapes,
+	const auto it = std::ranges::min_element(m_shapes,
 		[](const auto& shape1, const auto& shape2)
 		{
 			return shape1->GetPerimeter() > shape2->GetPerimeter();
@@ -154,6 +155,14 @@ void ShapeController::AddTriangle()
 
 	m_shapes.emplace_back(std::make_unique<Triangle>(Point(vertex1X, vertex1X),
 		Point(vertex2X, vertex2Y), Point(vertex3X, vertex3Y), outlineColorUint32, fillColorUint32));
+}
+void ShapeController::DrawShapes(sf::RenderWindow& window)
+{
+	Canvas canvas(window);
+	for (const auto& shape : m_shapes)
+	{
+		shape->Draw(canvas);
+	}
 }
 
 uint32_t ShapeController::StringToUint32(const std::string& string)

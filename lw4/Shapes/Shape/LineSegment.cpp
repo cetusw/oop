@@ -18,3 +18,8 @@ double LineSegment::GetPerimeter()
 Point LineSegment::GetStartPoint() const { return m_startPoint; }
 
 Point LineSegment::GetEndPoint() const { return m_endPoint; }
+
+void LineSegment::Draw(ICanvas& canvas)
+{
+	canvas.DrawLine(m_startPoint, m_endPoint, Shape::GetOutlineColor());
+}

@@ -1,0 +1,36 @@
+circle 791 605 150 000000 ffdfc4
+circle 883 610 150 000000 ffdfc4
+circle 886 570 110 ffdfc4 ffdfc4
+circle 875 568 110 ffdfc4 ffdfc4
+circle 864 563 110 ffdfc4 ffdfc4
+circle 875 568 110 ffdfc4 ffdfc4
+circle 855 560 110 ffdfc4 ffdfc4
+circle 828 550 110 ffdfc4 ffdfc4
+circle 800 540 105 ffdfc4 ffdfc4
+circle 805 542 100 ffdfc4 ffdfc4
+circle 786 535 100 ffdfc4 ffdfc4
+circle 775 530 100 ffdfc4 ffdfc4
+circle 764 525 100 ffdfc4 ffdfc4
+circle 750 518 100 ffdfc4 ffdfc4
+circle 733 505 100 ffdfc4 ffdfc4
+circle 731 505 100 ffdfc4 ffdfc4
+circle 717 495 100 ffdfc4 ffdfc4
+circle 705 485 100 ffdfc4 ffdfc4
+circle 691 470 100 ffdfc4 ffdfc4
+circle 683 460 100 ffdfc4 ffdfc4
+circle 667 440 100 ffdfc4 ffdfc4
+circle 660 428 100 ffdfc4 ffdfc4
+circle 655 418 100 ffdfc4 ffdfc4
+circle 648 402 100 ffdfc4 ffdfc4
+circle 643 390 100 db7093 db7093
+
+line 595 510 554 440 000000
+line 652 568 595 510 000000
+line 775 660 652 568 000000
+line 846 678 775 660 000000
+
+line 846 440 918 465 000000
+line 800 430 846 440 000000
+line 765 405 800 430 000000
+line 735 350 765 405 000000
+

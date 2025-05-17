@@ -22,4 +22,9 @@ Point Circle::GetCenter() const { return m_center; }
 
 double Circle::GetRadius() const { return m_radius; }
 
+void Circle::Draw(ICanvas& canvas)
+{
+	canvas.DrawCircle(m_center, m_radius, SolidShape::GetOutlineColor(), SolidShape::GetFillColor());
+}
+
 // TODO: убрать реализацию ++

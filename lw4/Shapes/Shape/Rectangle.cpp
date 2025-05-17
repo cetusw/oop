@@ -16,6 +16,11 @@ double Rectangle::GetWidth() const { return std::abs(m_rightBottom.y - m_leftTop
 
 double Rectangle::GetHeight() const { return std::abs(m_rightBottom.x - m_leftTop.x); }
 
+void Rectangle::Draw(ICanvas& canvas)
+{
+	canvas.DrawRectangle(m_leftTop, GetWidth(), GetHeight(), SolidShape::GetOutlineColor(), SolidShape::GetFillColor());
+}
+
 double Rectangle::GetArea() { return GetWidth() * GetHeight(); }
 
 double Rectangle::GetPerimeter() { return 2 * (GetWidth() + GetHeight()); }

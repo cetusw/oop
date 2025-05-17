@@ -17,6 +17,11 @@ Point Triangle::GetVertex2() const { return m_vertex2; }
 
 Point Triangle::GetVertex3() const { return m_vertex3; }
 
+void Triangle::Draw(ICanvas& canvas)
+{
+	canvas.DrawPolygon({m_vertex1, m_vertex2, m_vertex3}, SolidShape::GetOutlineColor(), SolidShape::GetFillColor());
+}
+
 double Triangle::GetArea()
 {
 	return std::abs(0.5

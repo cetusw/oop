@@ -13,6 +13,7 @@ public:
 
 	[[nodiscard]] Point GetStartPoint() const;
 	[[nodiscard]] Point GetEndPoint() const;
+	void Draw(ICanvas& canvas) override;
 
 
 private:

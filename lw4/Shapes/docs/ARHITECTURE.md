@@ -71,6 +71,30 @@ classDiagram
         +AddRectangle() void;
         +AddTriangle() void;
     }
+    class Triangle {
+        -m_vertex1 Point;
+        -m_vertex2 Point;
+        -m_vertex3 Point;
+        +GetArea() double;
+        +GetPerimeter() double;
+        +GetVertex1() Point;
+        +GetVertex2() Point;
+        +GetVertex3() Point;
+    }
+    class ICanvas {
+        -StringToUint32(const std::string& string) uint32_t;
+        -m_shapes std::vector~std::unique_ptr~Shape~~;
+        -m_input std::istream&;
+        -m_commands std::unordered_map~std::string, std::function~void()~~;
+        +ReadShapes() void;
+        +WriteShapes() void;
+        +PrintBiggestAreaShape() void;
+        +PrintShortestPerimeterShape() void;
+        +AddCircle() void;
+        +AddLineSegment() void;
+        +AddRectangle() void;
+        +AddTriangle() void;
+    }
     
     Shape ..|> IShape
     SolidShape ..|> ISolidShape
