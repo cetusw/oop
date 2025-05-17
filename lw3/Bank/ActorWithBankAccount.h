@@ -18,7 +18,7 @@ public:
 
 	bool DepositMoney(Money amount);
 
-	AccountId OpenAccount();
+	void OpenAccount();
 
 	[[nodiscard]] Money CloseAccount();
 

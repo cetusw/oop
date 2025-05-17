@@ -92,7 +92,7 @@ classDiagram
     }
 
     ActorWithBankAccount --|> Actor
-    ActorWithBankAccount --> Bank
+    ActorWithBankAccount --> Bank # TODO: пересмотреть
     Actors --> Actor
     Actors --> ActorWithBankAccount
     Actor ..> Actors

@@ -38,13 +38,13 @@ bool ActorWithBankAccount::DepositMoney(const Money amount)
 	return false;
 }
 
-AccountId ActorWithBankAccount::OpenAccount()
+void ActorWithBankAccount::OpenAccount()
 {
 	if (m_accountId)
 	{
 		throw BankOperationError("Cannot open account");
 	}
-	return m_accountId = m_bank.OpenAccount();
+	m_accountId = m_bank.OpenAccount();
 } // TODO: сделать так, чтобы был возможен открыт только один аккаунт одновременно ++
 
 Money ActorWithBankAccount::CloseAccount()
