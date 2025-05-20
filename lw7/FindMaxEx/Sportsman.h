@@ -5,9 +5,7 @@
 
 struct Sportsman
 {
-	std::string surname;
 	std::string name;
-	std::string patronymic;
 	float height;
 	float weight;
 };

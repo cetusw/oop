@@ -20,6 +20,6 @@ bool FindMaxEx(std::vector<T> const& arr, T& maxValue, Less const& less)
 	}
 
 	return true;
-};
+}
 
 #endif // FINDMAXEX_H

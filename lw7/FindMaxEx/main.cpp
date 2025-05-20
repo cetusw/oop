@@ -1,4 +1,4 @@
-#include "FindMaxEx.h"
+#include "FindMaxExTest.h"
 #include "Sportsman.h"
 
 #include <iostream>
@@ -8,14 +8,20 @@ int main()
 {
 	std::vector<Sportsman> sportsmen;
 	sportsmen.push_back({
-		"Sportsman1", "Sportsman1", "Sportsman1", 179.0, 180.0
+		"Sportsman1", 160.1, 100.3
 	});
 	sportsmen.push_back({
-		"Sportsman2", "Sportsman2", "Sportsman2", 180.0, 180.0
+		"Sportsman2", 180.9, 80.5
 	});
-	Sportsman maxHeight;
-	auto lessByHeight = [](const Sportsman& a, const Sportsman& b) { return a.height > b.height; };
-	FindMaxEx<Sportsman>(sportsmen, maxHeight, lessByHeight);
 
-	std::cout << maxHeight.name << std::endl;
+	Sportsman highestSportsman;
+	Sportsman heaviestSportsman;
+	auto returnHighest = [](const Sportsman& a, const Sportsman& b) { return a.height < b.height; };
+	auto returnHeaviest = [](const Sportsman& a, const Sportsman& b) { return a.weight < b.weight; };
+	FindMaxEx<Sportsman>(sportsmen, highestSportsman, returnHighest);
+	FindMaxEx<Sportsman>(sportsmen, heaviestSportsman, returnHeaviest);
+
+	std::cout << "Самый высокий спортсмен: " << highestSportsman.name << " - " << highestSportsman.height << "м" << std::endl;
+	std::cout << "Самый тяжёлый спортсмен: " << heaviestSportsman.name << " - " << heaviestSportsman.weight << "кг" << std::endl;
+
 }
