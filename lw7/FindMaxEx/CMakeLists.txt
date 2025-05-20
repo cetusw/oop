@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(GTest REQUIRED)
 
 add_executable(FindMaxEx main.cpp
-        FindMaxExTest.h
+        FindMaxEx.h
         Sportsman.h
 )
 
 add_executable(find-max-ex-tests
-        FindMaxExTest.h
+        FindMaxEx.h
         Sportsman.h
         Test/FindMaxExTest.cpp
 )

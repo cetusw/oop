@@ -1,4 +1,4 @@
-#include "../FindMaxExTest.h"
+#include "../FindMaxEx.h"
 #include "../Sportsman.h"
 #include <gtest/gtest.h>
 
@@ -204,4 +204,5 @@ TEST(FindMaxExTest, BoundWeightReversed) {
 				 s1,
 				 s2);
 }
+
 

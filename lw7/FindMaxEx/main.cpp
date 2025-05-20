@@ -1,4 +1,4 @@
-#include "FindMaxExTest.h"
+#include "FindMaxEx.h"
 #include "Sportsman.h"
 
 #include <iostream>
