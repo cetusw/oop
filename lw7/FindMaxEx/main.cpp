@@ -21,7 +21,7 @@ int main()
 	FindMaxEx<Sportsman>(sportsmen, highestSportsman, returnHighest);
 	FindMaxEx<Sportsman>(sportsmen, heaviestSportsman, returnHeaviest);
 
-	std::cout << "Самый высокий спортсмен: " << highestSportsman.name << " - " << highestSportsman.height << "м" << std::endl;
+	std::cout << "Самый высокий спортсмен: " << highestSportsman.name << " - " << highestSportsman.height << "см" << std::endl;
 	std::cout << "Самый тяжёлый спортсмен: " << heaviestSportsman.name << " - " << heaviestSportsman.weight << "кг" << std::endl;
 
 }

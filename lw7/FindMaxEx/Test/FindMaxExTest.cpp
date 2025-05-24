@@ -30,6 +30,10 @@ void FindMaxExTest(const std::vector<Sportsman>& sportsmen,
 	EXPECT_EQ(lightestSportsman.name, expectedLightestSportsman.name);
 }
 
+TEST(FindMaxExTest, Empty) {
+	const Sportsman s = {};
+	FindMaxExTest({}, s, s, s, s);
+}
 
 TEST(FindMaxExTest, SingleSportsman) {
     Sportsman s = {"John", 185, 90};
