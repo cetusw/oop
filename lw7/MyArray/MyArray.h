@@ -1,6 +1,9 @@
 #ifndef MYARRAY_H
 #define MYARRAY_H
+#include <iostream>
 #include <iterator>
+#include <limits>
+#include <ostream>
 
 template <typename T> class MyArray
 {
@@ -18,8 +21,9 @@ public:
 								  // вставляемые в конец массива элементы должны инициализироваться
 								  // значением по умолчанию для типа T.
 	void Clear();
-	void Swap(MyArray& other) noexcept;
+	void Swap(MyArray& other);
 	[[nodiscard]] size_t GetSize() const;
+	[[nodiscard]] size_t GetCapacity() const;
 
 	T* begin();
 	const T* begin() const;
@@ -28,7 +32,7 @@ public:
 	std::reverse_iterator<T*> rbegin();
 	std::reverse_iterator<const T*> rbegin() const;
 	std::reverse_iterator<T*> rend();
-	const std::reverse_iterator<const T*> rend() const;
+	std::reverse_iterator<const T*> rend() const;
 
 	T& operator[](size_t index); // TODO: В случае, если индекс элемента выходит за пределы массива,
 								 // должно выбрасываться исключение std::out_of_range
@@ -62,15 +66,14 @@ MyArray<T>::MyArray(const MyArray& other)
 	T* tempValues = nullptr;
 	if (other.m_values)
 	{
-		tempValues = new T[other.m_size];
+		tempValues = new T[other.m_capacity];
 		try
 		{
 			std::copy(other.m_values, other.m_values + other.m_size, tempValues);
 		}
-		catch (...)
+		catch (const std::exception& e)
 		{
-			delete[] tempValues;
-			throw;
+			std::cerr << e.what() << std::endl;
 		}
 	}
 	m_values = tempValues;
@@ -84,15 +87,18 @@ MyArray<T>::MyArray(MyArray&& other) noexcept
 {
 	other.m_values = nullptr;
 	other.m_size = 0;
+	other.m_capacity = 0;
 }
 
 template <typename T> void MyArray<T>::PushBack(T value)
 {
-	if (m_size == m_capacity)
+	if (m_size >= m_capacity)
 	{
-		Resize(m_capacity * 2);
+		const size_t newCapacity = m_capacity == 0 ? 1 : m_capacity * 2;
+		Resize(newCapacity);
 	}
-	m_values[m_size + 1] = value;
+	m_values[m_size] = value;
+	m_size++;
 }
 
 template <typename T> void MyArray<T>::Resize(const size_t capacity)
@@ -108,26 +114,22 @@ template <typename T> void MyArray<T>::Resize(const size_t capacity)
 		return;
 	}
 
-	if (capacity > m_capacity)
+	T* tempValues = nullptr;
+	tempValues = new T[capacity];
+	try
 	{
-		T* tempValues = nullptr;
-		tempValues = new T[capacity];
-		try
-		{
-			std::copy(m_values, m_values + m_size, tempValues);
-			delete[] m_values;
-		}
-		catch (...)
-		{
-			delete[] tempValues;
-			throw;
-		}
-		for (size_t i = m_size; i < capacity; ++i)
-		{
-			m_values[i] = T();
-		}
-		m_values = tempValues;
-		m_capacity = capacity;
+		std::copy(m_values, m_values + m_size, tempValues);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	delete[] m_values;
+	m_values = tempValues;
+	m_capacity = capacity;
+	for (size_t i = m_size; i < capacity; ++i)
+	{
+		m_values[i] = T();
 	}
 }
 
@@ -138,6 +140,7 @@ template <typename T> void MyArray<T>::Clear()
 	m_size = 0;
 	m_capacity = 0;
 }
+
 template <typename T> void MyArray<T>::Swap(MyArray& other)
 {
 	std::swap(m_values, other.m_values);
@@ -146,6 +149,8 @@ template <typename T> void MyArray<T>::Swap(MyArray& other)
 }
 
 template <typename T> size_t MyArray<T>::GetSize() const { return m_size; }
+
+template <typename T> size_t MyArray<T>::GetCapacity() const { return m_capacity; }
 
 template <typename T> T* MyArray<T>::begin() { return m_values; }
 
@@ -177,11 +182,10 @@ template <typename T> std::reverse_iterator<const T*> MyArray<T>::rend() const
 
 template <typename T> T& MyArray<T>::operator[](size_t index)
 {
-	if (index >= m_size)
+	if (index > m_size)
 	{
 		throw std::out_of_range("Array index out of range");
 	}
-
 	return m_values[index];
 }
 
@@ -206,17 +210,12 @@ template <typename T> MyArray<T>& MyArray<T>::operator=(const MyArray& other)
 	return *this;
 }
 
-template <typename T> MyArray<T>& MyArray<T>::operator=(MyArray&& other)
+template <typename T> MyArray<T>& MyArray<T>::operator=(MyArray&& other) noexcept
 {
 	if (this != &other)
 	{
-		Clear();
-		m_values = other.m_values;
-		m_size = other.m_size;
-		m_capacity = other.m_capacity;
-		other.m_values = nullptr;
-		other.m_size = 0;
-		other.m_capacity = 0;
+		MyArray temp(std::move(other));
+		Swap(temp);
 	}
 
 	return *this;
