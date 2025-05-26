@@ -2,8 +2,7 @@
 
 #include <gtest/gtest.h>
 
-template <typename T>
-void MyArrayTest()
+template <typename T> void MyArrayTest()
 {
 	const MyArray<T> myArray;
 	EXPECT_EQ(myArray.GetSize(), 0);
@@ -12,8 +11,7 @@ void MyArrayTest()
 	EXPECT_EQ(myArray.end(), nullptr);
 }
 
-template <typename T>
-void MyArrayCopyTest(const T& value)
+template <typename T> void MyArrayCopyTest(const T& value)
 {
 	MyArray<T> myArray;
 	myArray.PushBack(value);
@@ -24,8 +22,7 @@ void MyArrayCopyTest(const T& value)
 	EXPECT_EQ(myArray[0], myArrayCopy[0]);
 }
 
-template <typename T>
-void MyArrayMoveTest(const T& value)
+template <typename T> void MyArrayMoveTest(const T& value)
 {
 	MyArray<T> myArray;
 	myArray.PushBack(value);
@@ -38,7 +35,8 @@ void MyArrayMoveTest(const T& value)
 }
 
 template <typename T>
-void PushBackTest(MyArray<T>& myArray, const T& value, const size_t expectedSize, const size_t expectedCapacity)
+void PushBackTest(
+	MyArray<T>& myArray, const T& value, const size_t expectedSize, const size_t expectedCapacity)
 {
 	myArray.PushBack(value);
 	EXPECT_EQ(myArray.GetSize(), expectedSize);
@@ -54,8 +52,7 @@ void ResizeTest(MyArray<T>& myArray, size_t newCapacity, const size_t expectedSi
 	EXPECT_EQ(myArray.GetCapacity(), newCapacity);
 }
 
-template <typename T>
-void ClearTest(MyArray<T>& myArray)
+template <typename T> void ClearTest(MyArray<T>& myArray)
 {
 	myArray.Clear();
 	EXPECT_EQ(myArray.GetSize(), 0);
@@ -63,14 +60,12 @@ void ClearTest(MyArray<T>& myArray)
 	EXPECT_EQ(myArray.begin(), nullptr);
 }
 
-template <typename T>
-void GetSizeTest(MyArray<T>& myArray, const size_t expectedSize)
+template <typename T> void GetSizeTest(MyArray<T>& myArray, const size_t expectedSize)
 {
 	EXPECT_EQ(myArray.GetSize(), expectedSize);
 }
 
-template <typename T>
-void IteratorsTest(MyArray<T>& myArray, std::vector<T> expectedValues)
+template <typename T> void IteratorsTest(MyArray<T>& myArray, std::vector<T> expectedValues)
 {
 	auto it = myArray.begin();
 	size_t i = 0;
@@ -81,31 +76,35 @@ void IteratorsTest(MyArray<T>& myArray, std::vector<T> expectedValues)
 		++i;
 	}
 
-	i = expectedValues.size();
-	it = myArray.rbegin();
-	while (it != myArray.rend())
+	i = expectedValues.size() - 1;
+	auto revit = myArray.rbegin();
+	while (revit != myArray.rend())
 	{
-		EXPECT_EQ(*it, expectedValues[i]);
-		++it;
+		EXPECT_EQ(*revit, expectedValues[i]);
+		++revit;
 		--i;
 	}
-
 }
 
-template <typename T>
-void GetElementByIndexTest(MyArray<T>& myArray, size_t index, T expectedValue)
+template <typename T> void GetElementByIndexTest(MyArray<T>& myArray, std::vector<T> expectedValues)
 {
-	EXPECT_EQ(myArray[index], expectedValue);
-}
-
-template <typename T>
-void AppropriationTest(MyArray<T>& firstArray, MyArray<T>& secondArray, MyArray<T>& expectedArray)
-{
-	auto result = firstArray + secondArray;
-	for (size_t i = 0; i < result.GetSize(); i++)
+	for (int i = 0; i < myArray.GetSize(); i++)
 	{
-		EXPECT_EQ(result[i], expectedArray[i]);
+		EXPECT_EQ(myArray[i], expectedValues[i]);
 	}
+	EXPECT_THROW(myArray[myArray.GetSize()], std::out_of_range);
+	EXPECT_THROW(myArray[-1], std::out_of_range);
+}
+
+template <typename T>
+void AppropriationTest(MyArray<T>& firstArray, MyArray<T>& secondArray)
+{
+	firstArray = secondArray;
+	for (size_t i = 0; i < firstArray.GetSize(); i++)
+	{
+		EXPECT_EQ(firstArray[i], secondArray[i]);
+	}
+	EXPECT_EQ(firstArray.GetSize(), secondArray.GetSize());
 }
 
 TEST(MyArrayTest, Constructors)
@@ -303,4 +302,634 @@ TEST(ClearTest, ArrayWithValues)
 	arrStr.PushBack("world");
 	arrStr.PushBack("!");
 	ClearTest(arrStr);
+}
+
+TEST(ClearTest, ArrayWithNegativeValues)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(-1);
+	arrInt.PushBack(-2);
+	arrInt.PushBack(-3);
+	ClearTest(arrInt);
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(-1.2);
+	arrFloat.PushBack(-1.3);
+	arrFloat.PushBack(-1.4);
+	ClearTest(arrFloat);
+}
+
+TEST(ClearTest, EmptyStringArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	ClearTest(arrStr);
+}
+
+TEST(ClearTest, EmptyStringsArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	arrStr.PushBack("");
+	ClearTest(arrStr);
+}
+
+TEST(GetSizeTest, EmptyArray)
+{
+	MyArray<int> arrInt;
+	GetSizeTest(arrInt, 0);
+
+	MyArray<float> arrFloat;
+	GetSizeTest(arrFloat, 0);
+
+	MyArray<std::string> arrStr;
+	GetSizeTest(arrStr, 0);
+}
+
+TEST(GetSizeTest, OneElementArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	GetSizeTest(arrInt, 1);
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	GetSizeTest(arrFloat, 1);
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	GetSizeTest(arrStr, 1);
+}
+
+TEST(GetSizeTest, ManyElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	arrInt.PushBack(2);
+	arrInt.PushBack(3);
+	GetSizeTest(arrInt, 3);
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	arrFloat.PushBack(1.3);
+	arrFloat.PushBack(1.4);
+	GetSizeTest(arrFloat, 3);
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	arrStr.PushBack("world");
+	arrStr.PushBack("!");
+	GetSizeTest(arrStr, 3);
+}
+
+TEST(GetSizeTest, NegativeElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(-1);
+	arrInt.PushBack(-2);
+	arrInt.PushBack(-3);
+	GetSizeTest(arrInt, 3);
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(-1.2);
+	arrFloat.PushBack(-1.3);
+	arrFloat.PushBack(-1.4);
+	GetSizeTest(arrFloat, 3);
+}
+
+TEST(GetSizeTest, EmptyStringArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	GetSizeTest(arrStr, 1);
+}
+
+TEST(GetSizeTest, EmptyStringsArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	arrStr.PushBack("");
+	GetSizeTest(arrStr, 2);
+}
+
+TEST(IteratorsTest, EmptyArray)
+{
+	MyArray<int> arrInt;
+	IteratorsTest(arrInt, {});
+
+	MyArray<float> arrFloat;
+	IteratorsTest(arrFloat, {});
+
+	MyArray<std::string> arrStr;
+	IteratorsTest(arrStr, {});
+}
+
+TEST(IteratorsTest, OneElementArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	IteratorsTest(arrInt, { 1 });
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	IteratorsTest(arrFloat, { 1.2 });
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	IteratorsTest(arrStr, { "hello" });
+}
+
+TEST(IteratorsTest, ManyElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	arrInt.PushBack(2);
+	arrInt.PushBack(3);
+	IteratorsTest(arrInt, { 1, 2, 3 });
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	arrFloat.PushBack(1.3);
+	arrFloat.PushBack(1.4);
+	IteratorsTest(arrFloat, { 1.2, 1.3, 1.4 });
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	arrStr.PushBack("world");
+	arrStr.PushBack("!");
+	IteratorsTest(arrStr, { "hello", "world", "!" });
+}
+
+TEST(IteratorsTest, NegativeElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(-1);
+	arrInt.PushBack(-2);
+	arrInt.PushBack(-3);
+	IteratorsTest(arrInt, { -1, -2, -3 });
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(-1.2);
+	arrFloat.PushBack(-1.3);
+	arrFloat.PushBack(-1.4);
+	IteratorsTest(arrFloat, { -1.2, -1.3, -1.4 });
+}
+
+TEST(IteratorsTest, EmptyStringArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	IteratorsTest(arrStr, { "" });
+}
+
+TEST(IteratorsTest, EmptyStringsArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	arrStr.PushBack("");
+	IteratorsTest(arrStr, { "", "" });
+}
+
+TEST(GetElementByIndexTest, EmptyArray)
+{
+	MyArray<int> arrInt;
+	GetElementByIndexTest(arrInt, {});
+
+	MyArray<float> arrFloat;
+	GetElementByIndexTest(arrFloat, {});
+
+	MyArray<std::string> arrStr;
+	GetElementByIndexTest(arrInt, {});
+}
+
+TEST(GetElementByIndexTest, OneElementArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	GetElementByIndexTest(arrInt, {1});
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	GetElementByIndexTest(arrFloat, { 1.2 });
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	GetElementByIndexTest(arrStr, { "hello" });
+}
+
+TEST(GetElementByIndexTest, ManyElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(1);
+	arrInt.PushBack(2);
+	arrInt.PushBack(3);
+	GetElementByIndexTest(arrInt, { 1, 2, 3 });
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(1.2);
+	arrFloat.PushBack(1.3);
+	arrFloat.PushBack(1.4);
+	GetElementByIndexTest(arrFloat, { 1.2, 1.3, 1.4 });
+
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("hello");
+	arrStr.PushBack("world");
+	arrStr.PushBack("!");
+	GetElementByIndexTest(arrStr, { "hello", "world", "!" });
+}
+
+TEST(GetElementByIndexTest, NegativeElementsArray)
+{
+	MyArray<int> arrInt;
+	arrInt.PushBack(-1);
+	arrInt.PushBack(-2);
+	arrInt.PushBack(-3);
+	GetElementByIndexTest(arrInt, { -1, -2, -3 });
+
+	MyArray<float> arrFloat;
+	arrFloat.PushBack(-1.2);
+	arrFloat.PushBack(-1.3);
+	arrFloat.PushBack(-1.4);
+	GetElementByIndexTest(arrFloat, { -1.2, -1.3, -1.4 });
+}
+
+TEST(GetElementByIndexTest, EmptyStringArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	GetElementByIndexTest(arrStr, { "" });
+}
+
+TEST(GetElementByIndexTest, EmptyStringsArray)
+{
+	MyArray<std::string> arrStr;
+	arrStr.PushBack("");
+	arrStr.PushBack("");
+	GetElementByIndexTest(arrStr, { "", "" });
+}
+
+TEST(AppropriationTest, EmptyArrayAssignEmptyArray)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignArrayWithOneElement)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt2.PushBack(1);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat2.PushBack(1.2);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr2.PushBack("hello");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithOneElementAssignEmptyArray)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(1);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(1.2);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("hello");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignArrayWithManyElements)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt2.PushBack(1);
+	arrInt2.PushBack(2);
+	arrInt2.PushBack(3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat2.PushBack(1.2);
+	arrFloat2.PushBack(1.3);
+	arrFloat2.PushBack(1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr2.PushBack("hello");
+	arrStr2.PushBack("world");
+	arrStr2.PushBack("!");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithManyElementsAssignEmptyArray)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(1);
+	arrInt1.PushBack(2);
+	arrInt1.PushBack(3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(1.2);
+	arrFloat1.PushBack(1.3);
+	arrFloat1.PushBack(1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("hello");
+	arrStr1.PushBack("world");
+	arrStr1.PushBack("!");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithLessElementsAssignArrayWithMoreElements)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(0);
+	arrInt2.PushBack(1);
+	arrInt2.PushBack(2);
+	arrInt2.PushBack(3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(1.1);
+	arrFloat2.PushBack(1.2);
+	arrFloat2.PushBack(1.3);
+	arrFloat2.PushBack(1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("hello1");
+	arrStr2.PushBack("hello");
+	arrStr2.PushBack("world");
+	arrStr2.PushBack("!");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithMoreElementsAssignArrayWithLessElements)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(1);
+	arrInt1.PushBack(2);
+	arrInt1.PushBack(3);
+	arrInt2.PushBack(4);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(1.2);
+	arrFloat1.PushBack(1.3);
+	arrFloat1.PushBack(1.4);
+	arrFloat2.PushBack(1.5);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("hello");
+	arrStr1.PushBack("world");
+	arrStr1.PushBack("!");
+	arrStr2.PushBack("!");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignArrayWithOneElementNegative)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt2.PushBack(-1);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat2.PushBack(-1.2);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr2.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithOneElementAssignEmptyArrayNegative)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(-1);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(-1.2);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignArrayWithManyElementsNegative)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt2.PushBack(-1);
+	arrInt2.PushBack(-2);
+	arrInt2.PushBack(-3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat2.PushBack(-1.2);
+	arrFloat2.PushBack(-1.3);
+	arrFloat2.PushBack(-1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr2.PushBack("");
+	arrStr2.PushBack("");
+	arrStr2.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithManyElementsAssignEmptyArrayNegative)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(-1);
+	arrInt1.PushBack(-2);
+	arrInt1.PushBack(-3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(-1.2);
+	arrFloat1.PushBack(-1.3);
+	arrFloat1.PushBack(-1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithLessElementsAssignArrayWithMoreElementsNegative)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(0);
+	arrInt2.PushBack(-1);
+	arrInt2.PushBack(-2);
+	arrInt2.PushBack(-3);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(-1.1);
+	arrFloat2.PushBack(-1.2);
+	arrFloat2.PushBack(-1.3);
+	arrFloat2.PushBack(-1.4);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("");
+	arrStr2.PushBack("");
+	arrStr2.PushBack("");
+	arrStr2.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, ArrayWithMoreElementsAssignArrayWithLessElementsNegstive)
+{
+	MyArray<int> arrInt1;
+	MyArray<int> arrInt2;
+	arrInt1.PushBack(-1);
+	arrInt1.PushBack(-2);
+	arrInt1.PushBack(-3);
+	arrInt2.PushBack(-4);
+	AppropriationTest(arrInt1, arrInt2);
+
+	MyArray<float> arrFloat1;
+	MyArray<float> arrFloat2;
+	arrFloat1.PushBack(-1.2);
+	arrFloat1.PushBack(-1.3);
+	arrFloat1.PushBack(-1.4);
+	arrFloat2.PushBack(-1.5);
+	AppropriationTest(arrFloat1, arrFloat2);
+
+	MyArray<std::string> arrStr1;
+	MyArray<std::string> arrStr2;
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	arrStr2.PushBack("");
+	AppropriationTest(arrStr1, arrStr2);
+}
+
+TEST(AppropriationTest, AssignSameEmptyArray)
+{
+	MyArray<int> arrInt1;
+	AppropriationTest(arrInt1, arrInt1);
+
+	MyArray<float> arrFloat1;
+	AppropriationTest(arrFloat1, arrFloat1);
+
+	MyArray<std::string> arrStr1;
+	AppropriationTest(arrStr1, arrStr1);
+}
+
+TEST(AppropriationTest, AssignSameArrayWithElements)
+{
+	MyArray<int> arrInt1;
+	arrInt1.PushBack(1);
+	arrInt1.PushBack(2);
+	arrInt1.PushBack(3);
+	AppropriationTest(arrInt1, arrInt1);
+
+	MyArray<float> arrFloat1;
+	arrFloat1.PushBack(1.2);
+	arrFloat1.PushBack(1.3);
+	arrFloat1.PushBack(1.4);
+	AppropriationTest(arrFloat1, arrFloat1);
+
+	MyArray<std::string> arrStr1;
+	arrStr1.PushBack("hello");
+	arrStr1.PushBack("world");
+	arrStr1.PushBack("!");
+	AppropriationTest(arrStr1, arrStr1);
+}
+
+TEST(AppropriationTest, AssignSameArrayWithNegativeElements)
+{
+	MyArray<int> arrInt1;
+	arrInt1.PushBack(-1);
+	arrInt1.PushBack(-2);
+	arrInt1.PushBack(-3);
+	AppropriationTest(arrInt1, arrInt1);
+
+	MyArray<float> arrFloat1;
+	arrFloat1.PushBack(-1.2);
+	arrFloat1.PushBack(-1.3);
+	arrFloat1.PushBack(-1.4);
+	AppropriationTest(arrFloat1, arrFloat1);
+
+	MyArray<std::string> arrStr1;
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	AppropriationTest(arrStr1, arrStr1);
+}
+
+TEST(AppropriationTest, AssignSameArrayWithZeroElements)
+{
+	MyArray<int> arrInt1;
+	arrInt1.PushBack(0);
+	arrInt1.PushBack(0);
+	arrInt1.PushBack(0);
+	AppropriationTest(arrInt1, arrInt1);
+
+	MyArray<float> arrFloat1;
+	arrFloat1.PushBack(0);
+	arrFloat1.PushBack(0);
+	arrFloat1.PushBack(0);
+	AppropriationTest(arrFloat1, arrFloat1);
+
+	MyArray<std::string> arrStr1;
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	arrStr1.PushBack("");
+	AppropriationTest(arrStr1, arrStr1);
 }

@@ -10,5 +10,5 @@ int main()
 	myArray.PushBack("hello");
 	myArray.PushBack("hello1");
 	myArray2 = myArray;
-	std::cout << myArray2[0] << std::endl;
+	std::cout << *myArray2.begin() << std::endl;
 }

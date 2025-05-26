@@ -14,9 +14,7 @@ public:
 	MyArray(const MyArray& other);
 	MyArray(MyArray&& other) noexcept;
 
-	void PushBack(
-		T value); // TODO: Массив должен динамически увеличивать свой размер при добавлении
-				  // элементов. Вместимость буфера для хранения элементов должна удваиваться.
+	void PushBack(T value);
 	void Resize(size_t capacity); // TODO: В случае, если новая длина массива больше прежней,
 								  // вставляемые в конец массива элементы должны инициализироваться
 								  // значением по умолчанию для типа T.
@@ -167,7 +165,7 @@ template <typename T> std::reverse_iterator<T*> MyArray<T>::rbegin()
 
 template <typename T> std::reverse_iterator<const T*> MyArray<T>::rbegin() const
 {
-	return std::reverse_iterator<T*>(end());
+	return std::reverse_iterator<const T*>(end());
 }
 
 template <typename T> std::reverse_iterator<T*> MyArray<T>::rend()
@@ -182,7 +180,7 @@ template <typename T> std::reverse_iterator<const T*> MyArray<T>::rend() const
 
 template <typename T> T& MyArray<T>::operator[](size_t index)
 {
-	if (index > m_size)
+	if (index >= m_size)
 	{
 		throw std::out_of_range("Array index out of range");
 	}
@@ -191,7 +189,7 @@ template <typename T> T& MyArray<T>::operator[](size_t index)
 
 template <typename T> const T& MyArray<T>::operator[](size_t index) const
 {
-	if (index > m_size)
+	if (index >= m_size)
 	{
 		throw std::out_of_range("Array index out of range");
 	}
