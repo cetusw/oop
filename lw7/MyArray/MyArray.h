@@ -18,7 +18,7 @@ public:
 	void PushBack(T value);
 	void Resize(size_t capacity);
 	void Clear();
-	void Swap(MyArray& other);
+	void Swap(MyArray& other) noexcept;
 	[[nodiscard]] size_t GetSize() const;
 	[[nodiscard]] size_t GetCapacity() const;
 
@@ -36,6 +36,8 @@ public:
 
 	MyArray& operator=(const MyArray& other);
 	MyArray& operator=(MyArray&& other) noexcept;
+
+	template <typename U> MyArray& operator=(const MyArray<U>& other);
 
 private:
 	T* m_values;
@@ -137,7 +139,7 @@ template <typename T> void MyArray<T>::Clear()
 	m_capacity = 0;
 }
 
-template <typename T> void MyArray<T>::Swap(MyArray& other)
+template <typename T> void MyArray<T>::Swap(MyArray& other) noexcept
 {
 	std::swap(m_values, other.m_values);
 	std::swap(m_size, other.m_size);
@@ -212,6 +214,27 @@ template <typename T> MyArray<T>& MyArray<T>::operator=(MyArray&& other) noexcep
 	{
 		MyArray temp(std::move(other));
 		Swap(temp);
+	}
+
+	return *this;
+}
+
+template <typename T>
+template <typename U>
+MyArray<T>& MyArray<T>::operator=(const MyArray<U>& other)
+{
+	try
+	{
+		MyArray temp;
+		for (auto elem : other)
+		{
+			temp.PushBack(static_cast<T>(elem));
+		}
+		Swap(temp);
+	}
+	catch (...)
+	{
+		throw std::invalid_argument("Array assignment failed");
 	}
 
 	return *this;

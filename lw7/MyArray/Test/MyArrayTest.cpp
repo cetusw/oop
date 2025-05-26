@@ -96,9 +96,15 @@ template <typename T> void GetElementByIndexTest(MyArray<T>& myArray, std::vecto
 	EXPECT_THROW(myArray[-1], std::out_of_range);
 }
 
-template <typename T>
-void AppropriationTest(MyArray<T>& firstArray, MyArray<T>& secondArray)
+template <typename T, typename U>
+void AppropriationTest(MyArray<T>& firstArray, MyArray<U>& secondArray, const bool expectException = false)
 {
+	if (expectException)
+	{
+		EXPECT_THROW(firstArray = secondArray, std::invalid_argument);
+		return;
+	}
+
 	firstArray = secondArray;
 	for (size_t i = 0; i < firstArray.GetSize(); i++)
 	{
@@ -932,4 +938,181 @@ TEST(AppropriationTest, AssignSameArrayWithZeroElements)
 	arrStr1.PushBack("");
 	arrStr1.PushBack("");
 	AppropriationTest(arrStr1, arrStr1);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignEmptyArrayWithCast)
+{
+	MyArray<int> arrInt1;
+	MyArray<double> arrDouble1;
+	AppropriationTest(arrInt1, arrDouble1);
+
+	MyArray<double> arrDouble2;
+	MyArray<int> arrInt2;
+	AppropriationTest(arrDouble2, arrInt2);
+
+	MyArray<int> arrInt3;
+	MyArray<float> arrFloat1;
+	AppropriationTest(arrInt3, arrFloat1);
+
+	MyArray<float> arrFloat2;
+	MyArray<int> arrInt4;
+	AppropriationTest(arrFloat2, arrInt4);
+
+	MyArray<float> arrFloat3;
+	MyArray<double> arrDouble3;
+	AppropriationTest(arrFloat3, arrDouble3);
+
+	MyArray<double> arrDouble4;
+	MyArray<float> arrFloat4;
+	AppropriationTest(arrDouble4, arrFloat4);
+}
+
+TEST(AppropriationTest, EmptyArrayAssignArrayWithElementsWithCast)
+{
+	MyArray<int> arrInt1;
+	MyArray<double> arrDouble1;
+	arrDouble1.PushBack(1);
+	AppropriationTest(arrInt1, arrDouble1);
+
+	MyArray<double> arrDouble2;
+	MyArray<int> arrInt2;
+	arrInt2.PushBack(2);
+	AppropriationTest(arrDouble2, arrInt2);
+
+	MyArray<int> arrInt3;
+	MyArray<float> arrFloat1;
+	arrFloat1.PushBack(1);
+	AppropriationTest(arrInt3, arrFloat1);
+
+	MyArray<float> arrFloat2;
+	MyArray<int> arrInt4;
+	arrInt4.PushBack(2);
+	AppropriationTest(arrFloat2, arrInt4);
+
+	MyArray<float> arrFloat3;
+	MyArray<double> arrDouble3;
+	arrDouble3.PushBack(1);
+	AppropriationTest(arrFloat3, arrDouble3);
+
+	MyArray<double> arrDouble4;
+	MyArray<float> arrFloat4;
+	arrFloat4.PushBack(1);
+	AppropriationTest(arrDouble4, arrFloat4);
+}
+
+TEST(AppropriationTest, ArrayWithElementsAssignEmptyArrayWithCast)
+{
+	MyArray<int> arrInt1;
+	MyArray<double> arrDouble1;
+	arrInt1.PushBack(1);
+	AppropriationTest(arrInt1, arrDouble1);
+
+	MyArray<double> arrDouble2;
+	MyArray<int> arrInt2;
+	arrDouble2.PushBack(2);
+	AppropriationTest(arrDouble2, arrInt2);
+
+	MyArray<int> arrInt3;
+	MyArray<float> arrFloat1;
+	arrInt3.PushBack(1);
+	AppropriationTest(arrInt3, arrFloat1);
+
+	MyArray<float> arrFloat2;
+	MyArray<int> arrInt4;
+	arrFloat2.PushBack(2);
+	AppropriationTest(arrFloat2, arrInt4);
+
+	MyArray<float> arrFloat3;
+	MyArray<double> arrDouble3;
+	arrFloat3.PushBack(1);
+	AppropriationTest(arrFloat3, arrDouble3);
+
+	MyArray<double> arrDouble4;
+	MyArray<float> arrFloat4;
+	arrDouble4.PushBack(1);
+	AppropriationTest(arrDouble4, arrFloat4);
+}
+
+TEST(AppropriationTest, ArrayWithElementsAssignArrayWithElementsWithCast)
+{
+	MyArray<int> arrInt1;
+	MyArray<double> arrDouble1;
+	arrInt1.PushBack(1);
+	arrDouble1.PushBack(2);
+	AppropriationTest(arrInt1, arrDouble1);
+
+	MyArray<double> arrDouble2;
+	MyArray<int> arrInt2;
+	arrDouble2.PushBack(2);
+	arrInt2.PushBack(3);
+	AppropriationTest(arrDouble2, arrInt2);
+
+	MyArray<int> arrInt3;
+	MyArray<float> arrFloat1;
+	arrInt3.PushBack(1);
+	arrFloat1.PushBack(2);
+	AppropriationTest(arrInt3, arrFloat1);
+
+	MyArray<float> arrFloat2;
+	MyArray<int> arrInt4;
+	arrFloat2.PushBack(2);
+	arrInt4.PushBack(3);
+	AppropriationTest(arrFloat2, arrInt4);
+
+	MyArray<float> arrFloat3;
+	MyArray<double> arrDouble3;
+	arrFloat3.PushBack(1);
+	arrDouble3.PushBack(2);
+	AppropriationTest(arrFloat3, arrDouble3);
+
+	MyArray<double> arrDouble4;
+	MyArray<float> arrFloat4;
+	arrDouble4.PushBack(1);
+	arrFloat4.PushBack(2);
+	AppropriationTest(arrDouble4, arrFloat4);
+}
+
+TEST(AppropriationTest, ArrayWithLessElementsAssignArrayWithMoreElementsWithCast)
+{
+	MyArray<int> arrInt1;
+	MyArray<double> arrDouble1;
+	arrInt1.PushBack(1);
+	arrDouble1.PushBack(2);
+	arrDouble1.PushBack(2);
+	AppropriationTest(arrInt1, arrDouble1);
+
+	MyArray<double> arrDouble2;
+	MyArray<int> arrInt2;
+	arrDouble2.PushBack(2);
+	arrInt2.PushBack(3);
+	arrInt2.PushBack(3);
+	AppropriationTest(arrDouble2, arrInt2);
+
+	MyArray<int> arrInt3;
+	MyArray<float> arrFloat1;
+	arrInt3.PushBack(1);
+	arrFloat1.PushBack(2);
+	arrFloat1.PushBack(2);
+	AppropriationTest(arrInt3, arrFloat1);
+
+	MyArray<float> arrFloat2;
+	MyArray<int> arrInt4;
+	arrFloat2.PushBack(2);
+	arrInt4.PushBack(3);
+	arrInt4.PushBack(3);
+	AppropriationTest(arrFloat2, arrInt4);
+
+	MyArray<float> arrFloat3;
+	MyArray<double> arrDouble3;
+	arrFloat3.PushBack(1);
+	arrDouble3.PushBack(2);
+	arrDouble3.PushBack(2);
+	AppropriationTest(arrFloat3, arrDouble3);
+
+	MyArray<double> arrDouble4;
+	MyArray<float> arrFloat4;
+	arrDouble4.PushBack(1);
+	arrFloat4.PushBack(2);
+	arrFloat4.PushBack(2);
+	AppropriationTest(arrDouble4, arrFloat4);
 }

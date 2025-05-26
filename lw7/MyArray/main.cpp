@@ -5,10 +5,10 @@
 
 int main()
 {
-	MyArray<std::string> myArray;
-	MyArray<std::string> myArray2;
-	myArray.PushBack("hello");
-	myArray.PushBack("hello1");
-	myArray2 = myArray;
-	std::cout << *myArray2.begin() << std::endl;
+	MyArray<int> myArray1;
+	MyArray<double> myArray2;
+	myArray2.PushBack(1.1);
+	myArray2.PushBack(1.1);
+	myArray1 = myArray2;
+	std::cout << myArray1[0] << std::endl;
 }
