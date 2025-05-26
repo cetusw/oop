@@ -40,6 +40,14 @@ void FindMaxExTest(const std::vector<TestStructure>& structure,
 		EXPECT_FALSE(FindMaxEx<TestStructure>(structure, minCharValue, returnException));
 		EXPECT_FALSE(FindMaxEx<TestStructure>(structure, maxStringValue, returnException));
 		EXPECT_FALSE(FindMaxEx<TestStructure>(structure, minStringValue, returnException));
+		EXPECT_EQ(maxIntValue.intValue, 0);
+		EXPECT_EQ(minIntValue.intValue, 0);
+		EXPECT_EQ(maxFloatValue.floatValue, 0);
+		EXPECT_EQ(minFloatValue.floatValue, 0);
+		EXPECT_EQ(maxCharValue.charValue, '\0');
+		EXPECT_EQ(minCharValue.charValue, '\0');
+		EXPECT_EQ(maxStringValue.stringValue, "");
+		EXPECT_EQ(minStringValue.stringValue, "");
 		return;
 	}
 
@@ -219,10 +227,10 @@ TEST(FindMaxExTest, OnlyStringValueDifferentReverse)
 		t1, t2);
 }
 
-TEST(FindMaxExTest, Exception)
+TEST(FindMaxExTest, ExceptionAndRollback)
 {
-	const TestStructure t = {};
-	FindMaxExTest({}, t, t, t, t, t, t, t, t, true);
+	TestStructure t = { 1, 1.1f, 'A', "Test" };
+	FindMaxExTest({ t }, t, t, t, t, t, t, t, t, true);
 }
 
 // TODO: проверить исключение. отвязать от спорстменов ++
