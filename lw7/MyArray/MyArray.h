@@ -1,5 +1,6 @@
 #ifndef MYARRAY_H
 #define MYARRAY_H
+
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -15,9 +16,7 @@ public:
 	MyArray(MyArray&& other) noexcept;
 
 	void PushBack(T value);
-	void Resize(size_t capacity); // TODO: В случае, если новая длина массива больше прежней,
-								  // вставляемые в конец массива элементы должны инициализироваться
-								  // значением по умолчанию для типа T.
+	void Resize(size_t capacity);
 	void Clear();
 	void Swap(MyArray& other);
 	[[nodiscard]] size_t GetSize() const;
@@ -32,8 +31,7 @@ public:
 	std::reverse_iterator<T*> rend();
 	std::reverse_iterator<const T*> rend() const;
 
-	T& operator[](size_t index); // TODO: В случае, если индекс элемента выходит за пределы массива,
-								 // должно выбрасываться исключение std::out_of_range
+	T& operator[](size_t index);
 	const T& operator[](size_t index) const;
 
 	MyArray& operator=(const MyArray& other);
