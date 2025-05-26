@@ -25,9 +25,8 @@ bool FindMaxEx(std::vector<T> const& arr, T& maxValue, Less const& less)
 		}
 		maxValue = tempMax;
 	}
-	catch (const std::exception& e)
+	catch (...)
 	{
-		std::cout << e.what() << std::endl;
 		return false;
 	}
 
