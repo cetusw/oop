@@ -1,0 +1,20 @@
+#ifndef MONTH_H
+#define MONTH_H
+
+enum class Month
+{
+	JANUARY = 1,
+	FEBRUARY,
+	MARCH,
+	APRIL,
+	MAY,
+	JUNE,
+	JULY,
+	AUGUST,
+	SEPTEMBER,
+	OCTOBER,
+	NOVEMBER,
+	DECEMBER
+};
+
+#endif //MONTH_H
