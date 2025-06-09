@@ -5,6 +5,7 @@
 
 constexpr unsigned DAYS_IN_ERA = 146097;
 constexpr unsigned BEGIN_OFFSET = 719468;
+constexpr unsigned HALF_DAYS_IN_YEAR = 153;
 constexpr unsigned YEARS_IN_ERA = 400;
 constexpr unsigned DAYS_IN_YEAR = 365;
 constexpr unsigned MIN_YEAR = 1970;
@@ -46,7 +47,7 @@ unsigned DateToTimestamp(const unsigned day, const unsigned month, unsigned year
 	year -= month <= 2;
 	const unsigned era = year / YEARS_IN_ERA;
 	const unsigned yearOfEra = year - era * YEARS_IN_ERA;
-	const unsigned dayOfYear = (153 * (month > 2 ? month - 3 : month + 9) + 2) / 5 + day - 1;
+	const unsigned dayOfYear = (HALF_DAYS_IN_YEAR * (month > 2 ? month - 3 : month + 9) + 2) / 5 + day - 1;
 	const unsigned dayOfEra
 		= yearOfEra * DAYS_IN_YEAR + yearOfEra / 4 - yearOfEra / 100 + dayOfYear;
 
@@ -184,15 +185,15 @@ std::tuple<unsigned, Month, unsigned> Date::GetCivil() const
 {
 	unsigned timestamp = m_timestamp;
 
-	timestamp += 719468;
-	const unsigned era = timestamp / 146097;
-	const unsigned dayOfEra = timestamp - era * 146097;
+	timestamp += BEGIN_OFFSET;
+	const unsigned era = timestamp / DAYS_IN_ERA;
+	const unsigned dayOfEra = timestamp - era * DAYS_IN_ERA;
 	const unsigned yearOfEra
-		= (dayOfEra - dayOfEra / 1460 + dayOfEra / 36524 - dayOfEra / 146096) / 365;
-	const unsigned year = yearOfEra + era * 400;
-	const unsigned dayOfYear = dayOfEra - (365 * yearOfEra + yearOfEra / 4 - yearOfEra / 100);
-	const unsigned monthPeriod = (5 * dayOfYear + 2) / 153;
-	const unsigned day = dayOfYear - (153 * monthPeriod + 2) / 5 + 1;
+		= (dayOfEra - dayOfEra / 1460 + dayOfEra / 36524 - dayOfEra / DAYS_IN_ERA - 1) / DAYS_IN_YEAR;
+	const unsigned year = yearOfEra + era * YEARS_IN_ERA;
+	const unsigned dayOfYear = dayOfEra - (DAYS_IN_YEAR * yearOfEra + yearOfEra / 4 - yearOfEra / 100);
+	const unsigned monthPeriod = (5 * dayOfYear + 2) / HALF_DAYS_IN_YEAR;
+	const unsigned day = dayOfYear - (HALF_DAYS_IN_YEAR * monthPeriod + 2) / 5 + 1;
 	const unsigned monthNumber = monthPeriod < 10 ? monthPeriod + 3 : monthPeriod - 9;
 	auto month = static_cast<Month>(monthNumber);
 	return { day, month, year + (monthNumber <= 2) };
